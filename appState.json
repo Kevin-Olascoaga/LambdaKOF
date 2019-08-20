@@ -9,7 +9,8 @@
         "isDirectory": true,
         "children": [
           "d208d08c-c661-4a9c-8b84-5a3be13c9a94",
-          "75df272d-d232-43df-9648-86a980f1a19c"
+          "75df272d-d232-43df-9648-86a980f1a19c",
+          "05bfcffd-9744-4f23-89d0-3ce97fd8f097"
         ],
         "isRemovable": false,
         "filePath": "LambdaSNS"
@@ -69,15 +70,39 @@
             "config": {}
           }
         ]
+      },
+      "05bfcffd-9744-4f23-89d0-3ce97fd8f097": {
+        "id": "05bfcffd-9744-4f23-89d0-3ce97fd8f097",
+        "parent": "2c2fe5a7-7a86-4aa0-beb8-43c1c8b5437f",
+        "name": "geocoder.js",
+        "type": "JS_LAMBDA",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "LambdaSNS/geocoder.js",
+        "code": "exports.handler = function(event, context, callback) {\n    \n    callback(null, {\"message\": \"Successfully executed\"});\n}",
+        "config": {
+          "runtime": "nodejs8.10",
+          "handler": "handler",
+          "timeout": 60,
+          "memory": 128,
+          "layers": []
+        },
+        "triggers": [
+          {
+            "resourceName": "apigusWest2GeoGatewaygeocoderget",
+            "config": {}
+          }
+        ]
       }
     },
     "deletedFiles": [],
     "rootNode": "2c2fe5a7-7a86-4aa0-beb8-43c1c8b5437f",
     "openFiles": [
       "d208d08c-c661-4a9c-8b84-5a3be13c9a94",
-      "75df272d-d232-43df-9648-86a980f1a19c"
+      "05bfcffd-9744-4f23-89d0-3ce97fd8f097"
     ],
-    "currentFileId": "75df272d-d232-43df-9648-86a980f1a19c",
+    "currentFileId": "05bfcffd-9744-4f23-89d0-3ce97fd8f097",
     "resources": {
       "apigusWest2SMSGatewaysendSMSpost": {
         "name": "apigusWest2SMSGatewaysendSMSpost",
@@ -126,6 +151,25 @@
           "stageName": "Prod",
           "mode": 0
         }
+      },
+      "apigusWest2GeoGatewaygeocoderget": {
+        "name": "apigusWest2GeoGatewaygeocoderget",
+        "type": "API_GATEWAY",
+        "config": {
+          "selectedRegion": "us-west-2",
+          "apiMode": 0,
+          "apiName": "GeoGateway",
+          "endpointType": "EDGE",
+          "resourceMode": 0,
+          "resourceName": "geocoder",
+          "resourcePath": "/geocoder",
+          "restMethod": "GET",
+          "proxyIntegration": false,
+          "enableCORS": false,
+          "stageMode": 0,
+          "stageName": "Prod",
+          "mode": 0
+        }
       }
     },
     "customTemplate": {
@@ -150,6 +194,11 @@
           "version": "2.176.0",
           "dev": true,
           "notRemovable": false
+        },
+        "request": {
+          "name": "request",
+          "version": "2.88.0",
+          "language": "javascript"
         }
       }
     }
@@ -161,7 +210,7 @@
     "projectRegion": "us-west-2",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1566330610319
+    "lastSave": 1566336658223
   },
   "VCS_STATE": {
     "provider": "GitHub",

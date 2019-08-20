@@ -1,7 +1,9 @@
 {
   "name": "LambdaSNS",
   "version": "1.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "request": "2.88.0"
+  },
   "devDependencies": {
     "aws-sdk": "2.176.0"
   }
