@@ -44,6 +44,12 @@
             "functionId": "d208d08c-c661-4a9c-8b84-5a3be13c9a94",
             "name": "Mensaje prueba",
             "event": "{\n \"receiver\": \"+527771302351\",\n \"sender\": \"KOFSMS\",\n \"message\": \"Alta de cliente\"\n}"
+          },
+          "18394956-b41b-4cd3-9d02-61b1677d2b9e": {
+            "id": "18394956-b41b-4cd3-9d02-61b1677d2b9e",
+            "name": "geocoder",
+            "functionId": "d208d08c-c661-4a9c-8b84-5a3be13c9a94",
+            "event": "{\n    \"lat\": \"value1\",\n    \"lon\": \"value2\"\n}"
           }
         }
       },
@@ -80,7 +86,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "LambdaSNS/geocoder.js",
-        "code": "exports.handler = function(event, context, callback) {\n    \n    callback(null, {\"message\": \"Successfully executed\"});\n}",
+        "code": "var Request = require(\"request\");\n\nexports.handler = function(event, context, callback) {\n    \n    let lat = event['lat'];\n    let lon = event['lon'];\n\n    var data = geocoder(lat,lon);\n    \n    callback(null, data);\n}\n\nfunction geocoder(lat,lon){\n    Request.get(\"https://maps.googleapis.com/maps/api/geocode/json?latlng=\" + lat + \",\" + lon + \"&key=AIzaSyB_H0OkKqjnld_RXVKXClJbENg4xO4eVxQ\", (error, response, body) => {\n        if(error) {\n            return console.dir(error);\n        }\n        let api = JSON.parse(body);\n        let direccion = api.results[0];\n\n        console.log(direccion);\n\n        return direccion;\n\n\n    });\n}",
         "config": {
           "runtime": "nodejs8.10",
           "handler": "handler",
@@ -90,7 +96,7 @@
         },
         "triggers": [
           {
-            "resourceName": "apigusWest2GeoGatewaygeocoderget",
+            "resourceName": "apigusWest2GeoGatewaygeocoderpost",
             "config": {}
           }
         ]
@@ -170,6 +176,25 @@
           "stageName": "Prod",
           "mode": 0
         }
+      },
+      "apigusWest2GeoGatewaygeocoderpost": {
+        "name": "apigusWest2GeoGatewaygeocoderpost",
+        "type": "API_GATEWAY",
+        "config": {
+          "selectedRegion": "us-west-2",
+          "apiMode": 0,
+          "apiName": "GeoGateway",
+          "endpointType": "EDGE",
+          "resourceMode": 0,
+          "resourceName": "geocoder",
+          "resourcePath": "/geocoder",
+          "restMethod": "POST",
+          "proxyIntegration": false,
+          "enableCORS": false,
+          "stageMode": 0,
+          "stageName": "Prod",
+          "mode": 0
+        }
       }
     },
     "customTemplate": {
@@ -210,7 +235,7 @@
     "projectRegion": "us-west-2",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1566336658223
+    "lastSave": 1566338201742
   },
   "VCS_STATE": {
     "provider": "GitHub",
