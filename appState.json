@@ -8,7 +8,8 @@
         "type": "DIRECTORY",
         "isDirectory": true,
         "children": [
-          "d208d08c-c661-4a9c-8b84-5a3be13c9a94"
+          "d208d08c-c661-4a9c-8b84-5a3be13c9a94",
+          "75df272d-d232-43df-9648-86a980f1a19c"
         ],
         "isRemovable": false,
         "filePath": "LambdaSNS"
@@ -40,18 +41,43 @@
           "0eb08f81-4a9a-459a-a859-44ddf14d836c": {
             "id": "0eb08f81-4a9a-459a-a859-44ddf14d836c",
             "functionId": "d208d08c-c661-4a9c-8b84-5a3be13c9a94",
-            "name": "My First Test Case",
-            "event": "{\n    \"key1\": \"value1\",\n    \"key2\": \"value2\",\n    \"key3\": \"value3\"\n}"
+            "name": "Mensaje prueba",
+            "event": "{\n \"receiver\": \"+527771302351\",\n \"sender\": \"KOFSMS\",\n \"message\": \"Alta de cliente\"\n}"
           }
         }
+      },
+      "75df272d-d232-43df-9648-86a980f1a19c": {
+        "id": "75df272d-d232-43df-9648-86a980f1a19c",
+        "parent": "2c2fe5a7-7a86-4aa0-beb8-43c1c8b5437f",
+        "name": "mail.js",
+        "type": "JS_LAMBDA",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "LambdaSNS/mail.js",
+        "code": "exports.handler = function(event, context, callback) {\n    \n    let to = event['to'];\n    let cc = event['cc'];\n    let bcc = event['bcc'];\n    let subject = event['subject'];\n    let body = event['body'];\n\n    callback(null, {\"message\": \"Successfully executed\"});\n\n}",
+        "config": {
+          "runtime": "nodejs8.10",
+          "handler": "handler",
+          "timeout": 60,
+          "memory": 128,
+          "layers": []
+        },
+        "triggers": [
+          {
+            "resourceName": "apigusWest2MailGatewaysendEmailpost",
+            "config": {}
+          }
+        ]
       }
     },
     "deletedFiles": [],
     "rootNode": "2c2fe5a7-7a86-4aa0-beb8-43c1c8b5437f",
     "openFiles": [
-      "d208d08c-c661-4a9c-8b84-5a3be13c9a94"
+      "d208d08c-c661-4a9c-8b84-5a3be13c9a94",
+      "75df272d-d232-43df-9648-86a980f1a19c"
     ],
-    "currentFileId": "d208d08c-c661-4a9c-8b84-5a3be13c9a94",
+    "currentFileId": "75df272d-d232-43df-9648-86a980f1a19c",
     "resources": {
       "apigusWest2SMSGatewaysendSMSpost": {
         "name": "apigusWest2SMSGatewaysendSMSpost",
@@ -80,6 +106,25 @@
           "numbers": [
             "@{receiver}"
           ]
+        }
+      },
+      "apigusWest2MailGatewaysendEmailpost": {
+        "name": "apigusWest2MailGatewaysendEmailpost",
+        "type": "API_GATEWAY",
+        "config": {
+          "selectedRegion": "us-west-2",
+          "apiMode": 0,
+          "apiName": "MailGateway",
+          "endpointType": "EDGE",
+          "resourceMode": 0,
+          "resourceName": "sendEmail",
+          "resourcePath": "/sendEmail",
+          "restMethod": "POST",
+          "proxyIntegration": false,
+          "enableCORS": false,
+          "stageMode": 0,
+          "stageName": "Prod",
+          "mode": 0
         }
       }
     },
@@ -116,7 +161,7 @@
     "projectRegion": "us-west-2",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1566323637488
+    "lastSave": 1566330610319
   },
   "VCS_STATE": {
     "provider": "GitHub",
