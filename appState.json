@@ -1,0 +1,85 @@
+{
+  "EDITOR_STATE": {
+    "allProjectFiles": {
+      "2c2fe5a7-7a86-4aa0-beb8-43c1c8b5437f": {
+        "id": "2c2fe5a7-7a86-4aa0-beb8-43c1c8b5437f",
+        "parent": null,
+        "name": "LambdaSNS",
+        "type": "DIRECTORY",
+        "isDirectory": true,
+        "children": [
+          "d208d08c-c661-4a9c-8b84-5a3be13c9a94"
+        ],
+        "isRemovable": false,
+        "filePath": "LambdaSNS"
+      },
+      "d208d08c-c661-4a9c-8b84-5a3be13c9a94": {
+        "id": "d208d08c-c661-4a9c-8b84-5a3be13c9a94",
+        "parent": "2c2fe5a7-7a86-4aa0-beb8-43c1c8b5437f",
+        "name": "lambda.js",
+        "type": "JS_LAMBDA",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "LambdaSNS/lambda.js",
+        "code": "exports.handler = function(event, context, callback) {\n    \n    callback(null, {\"message\": \"Successfully executed\"});\n}",
+        "config": {
+          "runtime": "nodejs8.10",
+          "handler": "handler",
+          "timeout": 60,
+          "memory": 128,
+          "layers": []
+        },
+        "triggers": [],
+        "testCases": {
+          "0eb08f81-4a9a-459a-a859-44ddf14d836c": {
+            "id": "0eb08f81-4a9a-459a-a859-44ddf14d836c",
+            "functionId": "d208d08c-c661-4a9c-8b84-5a3be13c9a94",
+            "name": "My First Test Case",
+            "event": "{\n    \"key1\": \"value1\",\n    \"key2\": \"value2\",\n    \"key3\": \"value3\"\n}"
+          }
+        }
+      }
+    },
+    "deletedFiles": [],
+    "rootNode": "2c2fe5a7-7a86-4aa0-beb8-43c1c8b5437f",
+    "openFiles": [
+      "d208d08c-c661-4a9c-8b84-5a3be13c9a94"
+    ],
+    "currentFileId": "d208d08c-c661-4a9c-8b84-5a3be13c9a94",
+    "resources": {},
+    "customTemplate": {
+      "dialect": null,
+      "definitions": {}
+    },
+    "envVariables": [
+      {
+        "lambdaId": "all",
+        "varKey": "SIGMA_AWS_ACC_ID",
+        "varValue": null,
+        "shouldPersist": false,
+        "displayOnly": false,
+        "editable": false
+      }
+    ],
+    "packageJSON": {
+      "dependencies": {}
+    }
+  },
+  "PROJECT_META": {
+    "projectName": "LambdaSNS",
+    "projectDescription": "API para habilitar servicio SMS en pilotos KOF",
+    "projectVersion": "1.0.0",
+    "projectRegion": "us-west-2",
+    "platform": "AWS",
+    "platformRegions": {},
+    "lastSave": 1566320324598
+  },
+  "VCS_STATE": {
+    "provider": "GitHub",
+    "repo": {
+      "name": "LambdaSNS",
+      "url": "https://github.com/Kevin-Olascoaga/LambdaKOF"
+    }
+  }
+}
