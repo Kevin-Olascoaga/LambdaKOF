@@ -10,7 +10,9 @@
         "children": [
           "d208d08c-c661-4a9c-8b84-5a3be13c9a94",
           "75df272d-d232-43df-9648-86a980f1a19c",
-          "05bfcffd-9744-4f23-89d0-3ce97fd8f097"
+          "05bfcffd-9744-4f23-89d0-3ce97fd8f097",
+          "b923f823-ef31-4b00-90ab-f20e7764551a",
+          "0435f089-ca0c-4475-8f7a-a90f6f40b39c"
         ],
         "isRemovable": false,
         "filePath": "LambdaSNS"
@@ -100,15 +102,51 @@
             "config": {}
           }
         ]
+      },
+      "b923f823-ef31-4b00-90ab-f20e7764551a": {
+        "id": "b923f823-ef31-4b00-90ab-f20e7764551a",
+        "parent": "2c2fe5a7-7a86-4aa0-beb8-43c1c8b5437f",
+        "name": "filtroInventarios.py",
+        "type": "PYTHON_LAMBDA",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "LambdaSNS/filtroInventarios.py",
+        "code": "def handler(event, context):\n    \n    return {\"message\": \"Successfully executed\"}\n",
+        "config": {
+          "runtime": "python3.6",
+          "handler": "handler",
+          "timeout": 60,
+          "memory": 128,
+          "layers": []
+        },
+        "triggers": [
+          {
+            "resourceName": "apigusWest2InventarioGatewayinventarioany",
+            "config": {}
+          }
+        ]
+      },
+      "0435f089-ca0c-4475-8f7a-a90f6f40b39c": {
+        "id": "0435f089-ca0c-4475-8f7a-a90f6f40b39c",
+        "parent": "2c2fe5a7-7a86-4aa0-beb8-43c1c8b5437f",
+        "name": "__init__.py",
+        "type": "PYTHON_FILE",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "LambdaSNS/__init__.py",
+        "code": ""
       }
     },
     "deletedFiles": [],
     "rootNode": "2c2fe5a7-7a86-4aa0-beb8-43c1c8b5437f",
     "openFiles": [
       "d208d08c-c661-4a9c-8b84-5a3be13c9a94",
-      "05bfcffd-9744-4f23-89d0-3ce97fd8f097"
+      "05bfcffd-9744-4f23-89d0-3ce97fd8f097",
+      "b923f823-ef31-4b00-90ab-f20e7764551a"
     ],
-    "currentFileId": "05bfcffd-9744-4f23-89d0-3ce97fd8f097",
+    "currentFileId": "b923f823-ef31-4b00-90ab-f20e7764551a",
     "resources": {
       "apigusWest2SMSGatewaysendSMSpost": {
         "name": "apigusWest2SMSGatewaysendSMSpost",
@@ -195,6 +233,25 @@
           "stageName": "Prod",
           "mode": 0
         }
+      },
+      "apigusWest2InventarioGatewayinventarioany": {
+        "name": "apigusWest2InventarioGatewayinventarioany",
+        "type": "API_GATEWAY",
+        "config": {
+          "selectedRegion": "us-west-2",
+          "apiMode": 0,
+          "apiName": "InventarioGateway",
+          "endpointType": "EDGE",
+          "resourceMode": 0,
+          "resourceName": "inventario",
+          "resourcePath": "/inventario",
+          "restMethod": "ANY",
+          "proxyIntegration": false,
+          "enableCORS": false,
+          "stageMode": 0,
+          "stageName": "Prod",
+          "mode": 0
+        }
       }
     },
     "customTemplate": {
@@ -209,6 +266,14 @@
         "shouldPersist": false,
         "displayOnly": false,
         "editable": false
+      },
+      {
+        "lambdaId": "b923f823-ef31-4b00-90ab-f20e7764551a",
+        "varKey": "PYTHONPATH",
+        "varValue": "/var/runtime:/var/task/LambdaSNS",
+        "shouldPersist": true,
+        "displayOnly": false,
+        "editable": true
       }
     ],
     "packageJSON": {
@@ -224,6 +289,24 @@
           "name": "request",
           "version": "2.88.0",
           "language": "javascript"
+        },
+        "pandas": {
+          "name": "pandas",
+          "version": "0.25.0",
+          "dev": false,
+          "language": "python"
+        },
+        "tinys3": {
+          "name": "tinys3",
+          "version": "0.1.12",
+          "dev": false,
+          "language": "python"
+        },
+        "xlrd": {
+          "name": "xlrd",
+          "version": "1.2.0",
+          "dev": false,
+          "language": "python"
         }
       }
     }
@@ -235,7 +318,7 @@
     "projectRegion": "us-west-2",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1566338201742
+    "lastSave": 1566510466001
   },
   "VCS_STATE": {
     "provider": "GitHub",
