@@ -35,16 +35,16 @@ exports.handler = function(event, context, callback) {
     descripcion: event['descripcion'],
     ISSCOM: {
         cuestionario: event['ISSCOM.cuestionario'],
-        p1: "B",
-        p2: "A",
-        p3: "",
-        p4: "",
-        p5: "" 
+        p1: event['ISSCOM.p1'],
+        p2: event['ISSCOM.p2'],
+        p3: event['ISSCOM.p3'],
+        p4: event['ISSCOM.p4'],
+        p5: event['ISSCOM.p5'] 
         },
     GEC: {
-        p1: "SI",
-        p2: "NO",
-        p3: "SI"
+        p1: event['GEC.p1'],
+        p2: event['GEC.p2'],
+        p3: event['GEC.p3']
         }
     };
 

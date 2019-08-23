@@ -111,7 +111,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "LambdaSNS/clientes.js",
-        "code": "exports.handler = function(event, context, callback) {\n    \n    let cliente = {\n    idCliente: event['idCliente'],\n    codigoCliente: event['codigoCliente'],\n    fechaAlta: event['fechaAlta'],\n    nombreTienda: event['nombreTienda'],\n    nombreContacto: event['nombreContacto'],\n    apellidoContacto: event['apellidoContacto'],\n    telefono: event['telefono'],\n    celular: event['celular'],\n    correo: event['correo'],\n    latitud: event['latitud'],\n    longitud: event['longitud'],\n    codigoPostal: event['codigoPostal'],\n    estado: event['estado'],\n    municipio: event['municipio'],\n    colonia: event['colonia'],\n    calle: event['calle'],\n    numero: event['numero'],\n    rutaDeReparto: event['rutaDeReparto'],\n    remision: event['remision'],\n    regimenFiscal: event['regimenFiscal'],\n    RFCnombre: event['RFCnombre'],\n    RFCapellidos: event['RFCapellidos'],\n    RFC: event['RFC'],\n    RFCcodigoPostal: event['RFCcodigoPostal'],\n    RFCestado: event['RFCestado'],\n    RFCmunicipio: event['RFCmunicipio'],\n    RFCcolonia: event['RFCcolonia'],\n    RFCcalle: event['RFCcalle'],\n    RFCnumeroExt: event['RFCnumeroExt'],\n    RFCnumeroInt: event['RFCnumeroInt'],\n    CFDI: event['CFDI'],\n    descripcion: event['descripcion'],\n    ISSCOM: {\n        cuestionario: event['ISSCOM.cuestionario'],\n        p1: \"B\",\n        p2: \"A\",\n        p3: \"\",\n        p4: \"\",\n        p5: \"\" \n        },\n    GEC: {\n        p1: \"SI\",\n        p2: \"NO\",\n        p3: \"SI\"\n        }\n    };\n\n    callback(null, {\"message\": \"Successfully executed\"});\n}",
+        "code": "exports.handler = function(event, context, callback) {\n    \n    let cliente = {\n    idCliente: event['idCliente'],\n    codigoCliente: event['codigoCliente'],\n    fechaAlta: event['fechaAlta'],\n    nombreTienda: event['nombreTienda'],\n    nombreContacto: event['nombreContacto'],\n    apellidoContacto: event['apellidoContacto'],\n    telefono: event['telefono'],\n    celular: event['celular'],\n    correo: event['correo'],\n    latitud: event['latitud'],\n    longitud: event['longitud'],\n    codigoPostal: event['codigoPostal'],\n    estado: event['estado'],\n    municipio: event['municipio'],\n    colonia: event['colonia'],\n    calle: event['calle'],\n    numero: event['numero'],\n    rutaDeReparto: event['rutaDeReparto'],\n    remision: event['remision'],\n    regimenFiscal: event['regimenFiscal'],\n    RFCnombre: event['RFCnombre'],\n    RFCapellidos: event['RFCapellidos'],\n    RFC: event['RFC'],\n    RFCcodigoPostal: event['RFCcodigoPostal'],\n    RFCestado: event['RFCestado'],\n    RFCmunicipio: event['RFCmunicipio'],\n    RFCcolonia: event['RFCcolonia'],\n    RFCcalle: event['RFCcalle'],\n    RFCnumeroExt: event['RFCnumeroExt'],\n    RFCnumeroInt: event['RFCnumeroInt'],\n    CFDI: event['CFDI'],\n    descripcion: event['descripcion'],\n    ISSCOM: {\n        cuestionario: event['ISSCOM.cuestionario'],\n        p1: event['ISSCOM.p1'],\n        p2: event['ISSCOM.p2'],\n        p3: event['ISSCOM.p3'],\n        p4: event['ISSCOM.p4'],\n        p5: event['ISSCOM.p5'] \n        },\n    GEC: {\n        p1: event['GEC.p1'],\n        p2: event['GEC.p2'],\n        p3: event['GEC.p3']\n        }\n    };\n\n    callback(null, {\"message\": \"Successfully executed\"});\n}",
         "config": {
           "runtime": "nodejs8.10",
           "handler": "handler",
@@ -127,10 +127,7 @@
         ]
       }
     },
-    "deletedFiles": [
-      "LambdaSNS/filtroInventarios.py",
-      "LambdaSNS/__init__.py"
-    ],
+    "deletedFiles": [],
     "rootNode": "2c2fe5a7-7a86-4aa0-beb8-43c1c8b5437f",
     "openFiles": [
       "d208d08c-c661-4a9c-8b84-5a3be13c9a94",
@@ -328,7 +325,7 @@
     "projectRegion": "us-west-2",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1566578409941
+    "lastSave": 1566581413093
   },
   "VCS_STATE": {
     "provider": "GitHub",
