@@ -11,8 +11,7 @@
           "d208d08c-c661-4a9c-8b84-5a3be13c9a94",
           "75df272d-d232-43df-9648-86a980f1a19c",
           "05bfcffd-9744-4f23-89d0-3ce97fd8f097",
-          "b923f823-ef31-4b00-90ab-f20e7764551a",
-          "0435f089-ca0c-4475-8f7a-a90f6f40b39c"
+          "4d68f474-8705-43b9-bfab-301d2efece87"
         ],
         "isRemovable": false,
         "filePath": "LambdaSNS"
@@ -103,18 +102,18 @@
           }
         ]
       },
-      "b923f823-ef31-4b00-90ab-f20e7764551a": {
-        "id": "b923f823-ef31-4b00-90ab-f20e7764551a",
+      "4d68f474-8705-43b9-bfab-301d2efece87": {
+        "id": "4d68f474-8705-43b9-bfab-301d2efece87",
         "parent": "2c2fe5a7-7a86-4aa0-beb8-43c1c8b5437f",
-        "name": "filtroInventarios.py",
-        "type": "PYTHON_LAMBDA",
+        "name": "clientes.js",
+        "type": "JS_LAMBDA",
         "isDirectory": false,
         "children": [],
         "isRemovable": true,
-        "filePath": "LambdaSNS/filtroInventarios.py",
-        "code": "def handler(event, context):\n    \n    return {\"message\": \"Successfully executed\"}\n",
+        "filePath": "LambdaSNS/clientes.js",
+        "code": "exports.handler = function(event, context, callback) {\n    \n    let cliente = {\n    idCliente: event['idCliente'],\n    codigoCliente: event['codigoCliente'],\n    fechaAlta: event['fechaAlta'],\n    nombreTienda: event['nombreTienda'],\n    nombreContacto: event['nombreContacto'],\n    apellidoContacto: event['apellidoContacto'],\n    telefono: event['telefono'],\n    celular: event['celular'],\n    correo: event['correo'],\n    latitud: event['latitud'],\n    longitud: event['longitud'],\n    codigoPostal: event['codigoPostal'],\n    estado: event['estado'],\n    municipio: event['municipio'],\n    colonia: event['colonia'],\n    calle: event['calle'],\n    numero: event['numero'],\n    rutaDeReparto: event['rutaDeReparto'],\n    remision: event['remision'],\n    regimenFiscal: event['regimenFiscal'],\n    RFCnombre: event['RFCnombre'],\n    RFCapellidos: event['RFCapellidos'],\n    RFC: event['RFC'],\n    RFCcodigoPostal: event['RFCcodigoPostal'],\n    RFCestado: event['RFCestado'],\n    RFCmunicipio: event['RFCmunicipio'],\n    RFCcolonia: event['RFCcolonia'],\n    RFCcalle: event['RFCcalle'],\n    RFCnumeroExt: event['RFCnumeroExt'],\n    RFCnumeroInt: event['RFCnumeroInt'],\n    CFDI: event['CFDI'],\n    descripcion: event['descripcion'],\n    ISSCOM: {\n        cuestionario: event['ISSCOM.cuestionario'],\n        p1: \"B\",\n        p2: \"A\",\n        p3: \"\",\n        p4: \"\",\n        p5: \"\" \n        },\n    GEC: {\n        p1: \"SI\",\n        p2: \"NO\",\n        p3: \"SI\"\n        }\n    };\n\n    callback(null, {\"message\": \"Successfully executed\"});\n}",
         "config": {
-          "runtime": "python3.6",
+          "runtime": "nodejs8.10",
           "handler": "handler",
           "timeout": 60,
           "memory": 128,
@@ -122,31 +121,23 @@
         },
         "triggers": [
           {
-            "resourceName": "apigusWest2InventarioGatewayinventarioany",
+            "resourceName": "apigusWest2ClientesGatewayaltaClientesany",
             "config": {}
           }
         ]
-      },
-      "0435f089-ca0c-4475-8f7a-a90f6f40b39c": {
-        "id": "0435f089-ca0c-4475-8f7a-a90f6f40b39c",
-        "parent": "2c2fe5a7-7a86-4aa0-beb8-43c1c8b5437f",
-        "name": "__init__.py",
-        "type": "PYTHON_FILE",
-        "isDirectory": false,
-        "children": [],
-        "isRemovable": true,
-        "filePath": "LambdaSNS/__init__.py",
-        "code": ""
       }
     },
-    "deletedFiles": [],
+    "deletedFiles": [
+      "LambdaSNS/filtroInventarios.py",
+      "LambdaSNS/__init__.py"
+    ],
     "rootNode": "2c2fe5a7-7a86-4aa0-beb8-43c1c8b5437f",
     "openFiles": [
       "d208d08c-c661-4a9c-8b84-5a3be13c9a94",
       "05bfcffd-9744-4f23-89d0-3ce97fd8f097",
-      "b923f823-ef31-4b00-90ab-f20e7764551a"
+      "4d68f474-8705-43b9-bfab-301d2efece87"
     ],
-    "currentFileId": "b923f823-ef31-4b00-90ab-f20e7764551a",
+    "currentFileId": "4d68f474-8705-43b9-bfab-301d2efece87",
     "resources": {
       "apigusWest2SMSGatewaysendSMSpost": {
         "name": "apigusWest2SMSGatewaysendSMSpost",
@@ -252,6 +243,25 @@
           "stageName": "Prod",
           "mode": 0
         }
+      },
+      "apigusWest2ClientesGatewayaltaClientesany": {
+        "name": "apigusWest2ClientesGatewayaltaClientesany",
+        "type": "API_GATEWAY",
+        "config": {
+          "selectedRegion": "us-west-2",
+          "apiMode": 0,
+          "apiName": "ClientesGateway",
+          "endpointType": "EDGE",
+          "resourceMode": 0,
+          "resourceName": "altaClientes",
+          "resourcePath": "/altaClientes",
+          "restMethod": "ANY",
+          "proxyIntegration": false,
+          "enableCORS": false,
+          "stageMode": 0,
+          "stageName": "Prod",
+          "mode": 0
+        }
       }
     },
     "customTemplate": {
@@ -318,7 +328,7 @@
     "projectRegion": "us-west-2",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1566510466001
+    "lastSave": 1566578409941
   },
   "VCS_STATE": {
     "provider": "GitHub",
