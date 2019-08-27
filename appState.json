@@ -87,7 +87,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "LambdaSNS/geocoder.js",
-        "code": "var Request = require(\"request\");\n\nexports.handler = function(event, context, callback) {\n    \n    let lat = event['lat'];\n    let lon = event['lon'];\n\n    var data = geocoder(lat,lon);\n    \n    callback(null, data);\n}\n\nfunction geocoder(lat,lon){\n    Request.get(\"https://maps.googleapis.com/maps/api/geocode/json?latlng=\" + lat + \",\" + lon + \"&key=AIzaSyB_H0OkKqjnld_RXVKXClJbENg4xO4eVxQ\", (error, response, body) => {\n        if(error) {\n            return console.dir(error);\n        }\n        let api = JSON.parse(body);\n        let direccion = api.results[0];\n\n        console.log(direccion);\n\n        return direccion;\n\n\n    });\n}",
+        "code": "var Request = require(\"request\");\n\nexports.handler = function(event, context, callback) {\n    \n    let lat = event['lat'];\n    let lon = event['lon'];\n    let geocoder = {\n        numero: \"\",\n        calle: \"\",\n        colonia: \"\",\n        municipio: \"\",\n        estado: \"\",\n        pais: \"\",\n        codigoPostal: \"\"\n    }\n    \n    Request.get(\"https://maps.googleapis.com/maps/api/geocode/json?latlng=\" + lat + \",\" + lon + \"&key=AIzaSyB_H0OkKqjnld_RXVKXClJbENg4xO4eVxQ\", (error, response, body) => {\n        if(error) {\n            return console.dir(error);\n        }\n        let api = JSON.parse(body);\n        let direccion = api.results[0];\n        let dir = direccion.address_components\n        \n        dir.forEach(function(element) {\n            if (element.types[0] == \"street_number\") {\n                geocoder.numero = element.long_name;\n            }\n            if (element.types[0] == \"route\") {\n                geocoder.calle = element.long_name;\n            }\n            if (element.types[0] == \"neighborhood\") {\n                geocoder.municipio = element.long_name;\n            }\n            if (element.types[0] == \"political\") {\n                geocoder.colonia = element.long_name;\n            }\n            if (element.types[0] == \"locality\") {\n                geocoder.estado = element.long_name;\n            }\n            if (element.types[0] == \"country\") {\n                geocoder.pais = element.long_name;\n            }\n            if (element.types[0] == \"postal_code\") {\n                geocoder.codigoPostal = element.long_name;\n            }\n            console.log(element)\n            console.log(geocoder)\n        })\n        console.log(direccion);\n        callback(null, geocoder);\n    });\n}",
         "config": {
           "runtime": "nodejs8.10",
           "handler": "handler",
@@ -130,11 +130,10 @@
     "deletedFiles": [],
     "rootNode": "2c2fe5a7-7a86-4aa0-beb8-43c1c8b5437f",
     "openFiles": [
-      "d208d08c-c661-4a9c-8b84-5a3be13c9a94",
-      "05bfcffd-9744-4f23-89d0-3ce97fd8f097",
-      "4d68f474-8705-43b9-bfab-301d2efece87"
+      "4d68f474-8705-43b9-bfab-301d2efece87",
+      "05bfcffd-9744-4f23-89d0-3ce97fd8f097"
     ],
-    "currentFileId": "4d68f474-8705-43b9-bfab-301d2efece87",
+    "currentFileId": "05bfcffd-9744-4f23-89d0-3ce97fd8f097",
     "resources": {
       "apigusWest2SMSGatewaysendSMSpost": {
         "name": "apigusWest2SMSGatewaysendSMSpost",
@@ -325,7 +324,7 @@
     "projectRegion": "us-west-2",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1566919369452
+    "lastSave": 1566921485755
   },
   "VCS_STATE": {
     "provider": "GitHub",
