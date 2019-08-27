@@ -20,20 +20,29 @@ exports.handler = function(event, context, callback) {
     nombreTienda: event['nombreTienda'], //Capturada en Appian
     nombreContacto: event['nombreContacto'], //Capturado en Appian
     apellidoContacto: event['apellidoContacto'], //Capturado en Appian
-    telefono: event['telefono'], //Capturado en Appian
-    celular: event['celular'],
-    correo: event['correo'],
-    latitud: event['latitud'],
-    longitud: event['longitud'],
-    codigoPostal: event['codigoPostal'],
-    estado: event['estado'],
-    claveEstado: "", //buscar en catálogo
-    municipio: event['municipio'],
-    colonia: event['colonia'],
-    calle: event['calle'],
-    numeroExt: event['numeroExt'],
-    numeroInt: event['numeroInt'],
-    rutaDeReparto: event['rutaDeReparto'],
+    felfijo: event['telefono'], //Capturado en Appian
+    celular: event['celular'], //Capturado en Appian
+    telfijo_cel: event['celular'],
+    correo: event['correo'], //Capturado en Appian
+    latitud: event['latitud'], //Capturado en Appian con gps
+    longitud: event['longitud'], //Capturado en Appian con gps
+    codigoPostal: event['codigoPostal'], //Capturado en Appian
+    estado: event['estado'], //Capturado en Appian
+    claveEstado: "", //**buscar en catálogo
+    municipio: event['municipio'], //Capturado en Appian
+    colonia: event['colonia'], //Capturado en Appian
+    calle: event['calle'], //Capturado en Appian
+    callecon: ".", //dato dummy
+    entrecalle1: ".", //dato dummy
+    numeroExt: event['numeroExt'], //Capturado en Appian
+    lote: ".", //dato dummy
+    manzana: ".", //dato dummy
+    numeroInt: event['numeroInt'], //Capturado en Appian
+    enrejado: "", //Capturado en Appian
+    planVisitaRutaPreventa: "", //**Catalogo de rutas
+    rutaDeReparto: event['rutaDeReparto'], //Capturado en Appian
+        //Visita
+    diasVisita = event['diasVisita'],
     diaEntrega: event['rutaEntrega'], //se genera con catalogo de metodo desde Appian
     remision: event['remision'],
     regimenFiscal: event['regimenFiscal'],
