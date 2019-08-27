@@ -17,23 +17,27 @@ exports.handler = function(event, context, callback) {
     idCliente: event['idCliente'], //Generado incrementalmente desde Appian, temporal hasta que se tenga el definitivo de SAP
     codigoCliente: event['codigoCliente'], //Usuario final que genera el transaccional
     fechaAlta: event['fechaAlta'], //Generada por Appian
-    nombreTienda: event['nombreTienda'], //
-    nombreContacto: event['nombreContacto'],
-    apellidoContacto: event['apellidoContacto'],
-    telefono: event['telefono'],
+    nombreTienda: event['nombreTienda'], //Capturada en Appian
+    nombreContacto: event['nombreContacto'], //Capturado en Appian
+    apellidoContacto: event['apellidoContacto'], //Capturado en Appian
+    telefono: event['telefono'], //Capturado en Appian
     celular: event['celular'],
     correo: event['correo'],
     latitud: event['latitud'],
     longitud: event['longitud'],
     codigoPostal: event['codigoPostal'],
     estado: event['estado'],
+    claveEstado: "", //buscar en catálogo
     municipio: event['municipio'],
     colonia: event['colonia'],
     calle: event['calle'],
-    numero: event['numero'],
+    numeroExt: event['numeroExt'],
+    numeroInt: event['numeroInt'],
     rutaDeReparto: event['rutaDeReparto'],
+    diaEntrega: event['rutaEntrega'], //se genera con catalogo de metodo desde Appian
     remision: event['remision'],
     regimenFiscal: event['regimenFiscal'],
+    razonSocial: event['razonSocial'], //Ingresada en caso de que sea persona moral
     RFCnombre: event['RFCnombre'],
     RFCapellidos: event['RFCapellidos'],
     RFC: event['RFC'],
@@ -59,6 +63,10 @@ exports.handler = function(event, context, callback) {
         p2: event['GEC.p2'],
         p3: event['GEC.p3']
         }
+    };
+
+    let pedidos = {
+
     };
 
     callback(null, {"message": "Cliente creado"});

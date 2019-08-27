@@ -11,7 +11,8 @@
           "d208d08c-c661-4a9c-8b84-5a3be13c9a94",
           "75df272d-d232-43df-9648-86a980f1a19c",
           "05bfcffd-9744-4f23-89d0-3ce97fd8f097",
-          "4d68f474-8705-43b9-bfab-301d2efece87"
+          "4d68f474-8705-43b9-bfab-301d2efece87",
+          "a0427590-749e-4c7c-a1c9-c666864ec1ba"
         ],
         "isRemovable": false,
         "filePath": "LambdaSNS"
@@ -111,7 +112,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "LambdaSNS/clientes.js",
-        "code": "exports.handler = function(event, context, callback) {\n    \n    let cliente = {\n        //Back\n    idOficinaMovil: \"\", //Identificador aleatorio para OM (16)\n    orgVentas: \"0142\", //Dato fijo de organización de ventas 0142\n    region: \"\", //**Generar con el catalogo de codigo postal\n    distribuidora: \"\", //**Generar con el catalogo de codigo postal\n    KUNNR: \"CD00000000\", //Dato fijo para clientes nuevos\n    idSolicitud: \"\", //Generar aleatorio (22),\n    solicitudAlta: \"ZB18\", //Dato fijo para altas de cliente\n    rutaPreventa: \"\", //**Generar con el catalogo de rutas\n    nota: \".\", //Se solicita en la mascara de clientes\n    fechaCreacion: \"\", //Extraer con la información de fechaAlta\n    horaCreacion: \"\", //Extraer con la información de fechaAlta\n        //Front Appian\n    idCliente: event['idCliente'], //Generado incrementalmente desde Appian, temporal hasta que se tenga el definitivo de SAP\n    codigoCliente: event['codigoCliente'], //Usuario final que genera el transaccional\n    fechaAlta: event['fechaAlta'], //Generada por Appian\n    nombreTienda: event['nombreTienda'], //\n    nombreContacto: event['nombreContacto'],\n    apellidoContacto: event['apellidoContacto'],\n    telefono: event['telefono'],\n    celular: event['celular'],\n    correo: event['correo'],\n    latitud: event['latitud'],\n    longitud: event['longitud'],\n    codigoPostal: event['codigoPostal'],\n    estado: event['estado'],\n    municipio: event['municipio'],\n    colonia: event['colonia'],\n    calle: event['calle'],\n    numero: event['numero'],\n    rutaDeReparto: event['rutaDeReparto'],\n    remision: event['remision'],\n    regimenFiscal: event['regimenFiscal'],\n    RFCnombre: event['RFCnombre'],\n    RFCapellidos: event['RFCapellidos'],\n    RFC: event['RFC'],\n    RFCcodigoPostal: event['RFCcodigoPostal'],\n    RFCestado: event['RFCestado'],\n    RFCmunicipio: event['RFCmunicipio'],\n    RFCcolonia: event['RFCcolonia'],\n    RFCcalle: event['RFCcalle'],\n    RFCnumeroExt: event['RFCnumeroExt'],\n    RFCnumeroInt: event['RFCnumeroInt'],\n    CFDI: event['CFDI'],\n    descripcion: event['descripcion'],\n    ISSCOM: {\n        cuestionario: event['ISSCOM.cuestionario'],\n        p1: event['ISSCOM.p1'],\n        p2: event['ISSCOM.p2'],\n        p3: event['ISSCOM.p3'],\n        p4: event['ISSCOM.p4'],\n        p5: event['ISSCOM.p5'] \n        },\n    GEC: {\n        p1: event['GEC.p1'],\n        p2: event['GEC.p2'],\n        p3: event['GEC.p3']\n        }\n    };\n\n    callback(null, {\"message\": \"Cliente creado\"});\n}",
+        "code": "exports.handler = function(event, context, callback) {\n    \n    let cliente = {\n        //Back\n    idOficinaMovil: \"\", //Identificador aleatorio para OM (16)\n    orgVentas: \"0142\", //Dato fijo de organización de ventas 0142\n    region: \"\", //**Generar con el catalogo de codigo postal\n    distribuidora: \"\", //**Generar con el catalogo de codigo postal\n    KUNNR: \"CD00000000\", //Dato fijo para clientes nuevos\n    idSolicitud: \"\", //Generar aleatorio (22),\n    solicitudAlta: \"ZB18\", //Dato fijo para altas de cliente\n    rutaPreventa: \"\", //**Generar con el catalogo de rutas\n    nota: \".\", //Se solicita en la mascara de clientes\n    fechaCreacion: \"\", //Extraer con la información de fechaAlta\n    horaCreacion: \"\", //Extraer con la información de fechaAlta\n        //Front Appian\n    idCliente: event['idCliente'], //Generado incrementalmente desde Appian, temporal hasta que se tenga el definitivo de SAP\n    codigoCliente: event['codigoCliente'], //Usuario final que genera el transaccional\n    fechaAlta: event['fechaAlta'], //Generada por Appian\n    nombreTienda: event['nombreTienda'], //Capturada en Appian\n    nombreContacto: event['nombreContacto'], //Capturado en Appian\n    apellidoContacto: event['apellidoContacto'], //Capturado en Appian\n    telefono: event['telefono'], //Capturado en Appian\n    celular: event['celular'],\n    correo: event['correo'],\n    latitud: event['latitud'],\n    longitud: event['longitud'],\n    codigoPostal: event['codigoPostal'],\n    estado: event['estado'],\n    claveEstado: \"\", //buscar en catálogo\n    municipio: event['municipio'],\n    colonia: event['colonia'],\n    calle: event['calle'],\n    numeroExt: event['numeroExt'],\n    numeroInt: event['numeroInt'],\n    rutaDeReparto: event['rutaDeReparto'],\n    diaEntrega: event['rutaEntrega'], //se genera con catalogo de metodo desde Appian\n    remision: event['remision'],\n    regimenFiscal: event['regimenFiscal'],\n    razonSocial: event['razonSocial'], //Ingresada en caso de que sea persona moral\n    RFCnombre: event['RFCnombre'],\n    RFCapellidos: event['RFCapellidos'],\n    RFC: event['RFC'],\n    RFCcodigoPostal: event['RFCcodigoPostal'],\n    RFCestado: event['RFCestado'],\n    RFCmunicipio: event['RFCmunicipio'],\n    RFCcolonia: event['RFCcolonia'],\n    RFCcalle: event['RFCcalle'],\n    RFCnumeroExt: event['RFCnumeroExt'],\n    RFCnumeroInt: event['RFCnumeroInt'],\n    CFDI: event['CFDI'],\n    descripcion: event['descripcion'],\n    ISSCOM: {\n        cuestionario: event['ISSCOM.cuestionario'],\n        p1: event['ISSCOM.p1'],\n        p2: event['ISSCOM.p2'],\n        p3: event['ISSCOM.p3'],\n        p4: event['ISSCOM.p4'],\n        p5: event['ISSCOM.p5'] \n        },\n    GEC: {\n        p1: event['GEC.p1'],\n        p2: event['GEC.p2'],\n        p3: event['GEC.p3']\n        }\n    };\n\n    let pedidos = {\n\n    };\n\n    callback(null, {\"message\": \"Cliente creado\"});\n}",
         "config": {
           "runtime": "nodejs8.10",
           "handler": "handler",
@@ -125,15 +126,40 @@
             "config": {}
           }
         ]
+      },
+      "a0427590-749e-4c7c-a1c9-c666864ec1ba": {
+        "id": "a0427590-749e-4c7c-a1c9-c666864ec1ba",
+        "parent": "2c2fe5a7-7a86-4aa0-beb8-43c1c8b5437f",
+        "name": "consultaClientes.js",
+        "type": "JS_LAMBDA",
+        "isDirectory": false,
+        "children": [],
+        "isRemovable": true,
+        "filePath": "LambdaSNS/consultaClientes.js",
+        "code": "exports.handler = function(event, context, callback) {\n    let idCliente = event['idCliente'];\n    \n    callback(null, {\"codigoCliente\": idCliente});\n}",
+        "config": {
+          "runtime": "nodejs8.10",
+          "handler": "handler",
+          "timeout": 60,
+          "memory": 128,
+          "layers": []
+        },
+        "triggers": [
+          {
+            "resourceName": "apigusWest2ConsultaClientesGatewayconsultaClientesany",
+            "config": {}
+          }
+        ]
       }
     },
     "deletedFiles": [],
     "rootNode": "2c2fe5a7-7a86-4aa0-beb8-43c1c8b5437f",
     "openFiles": [
       "4d68f474-8705-43b9-bfab-301d2efece87",
-      "05bfcffd-9744-4f23-89d0-3ce97fd8f097"
+      "05bfcffd-9744-4f23-89d0-3ce97fd8f097",
+      "a0427590-749e-4c7c-a1c9-c666864ec1ba"
     ],
-    "currentFileId": "05bfcffd-9744-4f23-89d0-3ce97fd8f097",
+    "currentFileId": "4d68f474-8705-43b9-bfab-301d2efece87",
     "resources": {
       "apigusWest2SMSGatewaysendSMSpost": {
         "name": "apigusWest2SMSGatewaysendSMSpost",
@@ -258,6 +284,25 @@
           "stageName": "Prod",
           "mode": 0
         }
+      },
+      "apigusWest2ConsultaClientesGatewayconsultaClientesany": {
+        "name": "apigusWest2ConsultaClientesGatewayconsultaClientesany",
+        "type": "API_GATEWAY",
+        "config": {
+          "selectedRegion": "us-west-2",
+          "apiMode": 0,
+          "apiName": "ConsultaClientesGateway",
+          "endpointType": "EDGE",
+          "resourceMode": 0,
+          "resourceName": "consultaClientes",
+          "resourcePath": "/consultaClientes",
+          "restMethod": "ANY",
+          "proxyIntegration": false,
+          "enableCORS": false,
+          "stageMode": 0,
+          "stageName": "Prod",
+          "mode": 0
+        }
       }
     },
     "customTemplate": {
@@ -324,7 +369,7 @@
     "projectRegion": "us-west-2",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1566921504420
+    "lastSave": 1566925633048
   },
   "VCS_STATE": {
     "provider": "GitHub",
