@@ -1,6 +1,7 @@
 exports.handler = function(event, context, callback) {
     
     let cliente = {
+        //Back
     idOficinaMovil: "", //Identificador aleatorio para OM (16)
     orgVentas: "0142", //Dato fijo de organización de ventas 0142
     region: "", //**Generar con el catalogo de codigo postal
@@ -10,8 +11,9 @@ exports.handler = function(event, context, callback) {
     solicitudAlta: "ZB18", //Dato fijo para altas de cliente
     rutaPreventa: "", //**Generar con el catalogo de rutas
     nota: ".", //Se solicita en la mascara de clientes
-    fechaCreación: "", //Extraer con la información de fecha de alta
-    
+    fechaCreacion: "", //Extraer con la información de fechaAlta
+    horaCreacion: "", //Extraer con la información de fechaAlta
+        //Front Appian
     idCliente: event['idCliente'], //Generado incrementalmente desde Appian, temporal hasta que se tenga el definitivo de SAP
     codigoCliente: event['codigoCliente'], //Usuario final que genera el transaccional
     fechaAlta: event['fechaAlta'], //Generada por Appian
@@ -59,5 +61,5 @@ exports.handler = function(event, context, callback) {
         }
     };
 
-    callback(null, {"message": "Successfully executed"});
+    callback(null, {"message": "Cliente creado"});
 }
