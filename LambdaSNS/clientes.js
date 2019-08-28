@@ -88,5 +88,7 @@ exports.handler = function(event, context, callback) {
         console.log(element);
     });
 
+    
+
     callback(null, {"message": "Cliente creado"});
 }
