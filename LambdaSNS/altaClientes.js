@@ -92,15 +92,14 @@ exports.handler = function (event, context, callback) {
     //     console.log(element);
     // });
 
-    let xls = json2xls(cliente);
-
     let prueba = {
         nombre: "Kevin",
         apellido: "Olascoaga"
     }
+    let xls = json2xls(prueba);
 
     s3.putObject({
-        "Body": prueba,
+        "Body": xls,
         "Bucket": "clienteskof",
         "Key": "AKIARYVZLDKZUWHAEZMD"
     })
