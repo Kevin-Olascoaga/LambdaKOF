@@ -88,9 +88,9 @@ exports.handler = function (event, context, callback) {
 
     let pedidos = event['productos'];
 
-    pedidos.forEach(function (element) {
-        console.log(element);
-    });
+    // pedidos.forEach(function (element) {
+    //     console.log(element);
+    // });
 
     let xls = json2xls(cliente);
 
