@@ -101,7 +101,7 @@ exports.handler = function (event, context, callback) {
     s3.putObject({
         "Body": xls,
         "Bucket": "clienteskof",
-        "Key": "AKIARYVZLDKZUWHAEZMD"
+        "Key": "clientes.xlsx"
     })
         .promise()
         .then(data => {
