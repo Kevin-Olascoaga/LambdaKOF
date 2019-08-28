@@ -43,8 +43,16 @@ exports.handler = function(event, context, callback) {
     rutaDeReparto: event['rutaDeReparto'], //Capturado en Appian
         //Visita
     diasVisita = event['diasVisita'],
+    lunes = "",
+    martes = "",
+    miercoles = "",
+    jueves = "",
+    viernes = "",
+    sabado = "",
     diaEntrega: event['rutaEntrega'], //se genera con catalogo de metodo desde Appian
     remision: event['remision'],
+    factura: "", // si trae datos de RFC se considera como True
+    noImpresion: "",
     regimenFiscal: event['regimenFiscal'],
     razonSocial: event['razonSocial'], //Ingresada en caso de que sea persona moral
     RFCnombre: event['RFCnombre'],
@@ -74,9 +82,11 @@ exports.handler = function(event, context, callback) {
         }
     };
 
-    let pedidos = {
+    let pedidos = event['productos'];
 
-    };
+    pedidos.forEach(function(element) {
+        console.log(element);
+    });
 
     callback(null, {"message": "Cliente creado"});
 }
