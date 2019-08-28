@@ -42,13 +42,13 @@ exports.handler = function(event, context, callback) {
     planVisitaRutaPreventa: "", //**Catalogo de rutas
     rutaDeReparto: event['rutaDeReparto'], //Capturado en Appian
         //Visita
-    diasVisita = event['diasVisita'],
-    lunes = "",
-    martes = "",
-    miercoles = "",
-    jueves = "",
-    viernes = "",
-    sabado = "",
+    diasVisita: event['diasVisita'],
+    lunes: "",
+    martes: "",
+    miercoles: "",
+    jueves: "",
+    viernes: "",
+    sabado: "",
     diaEntrega: event['rutaEntrega'], //se genera con catalogo de metodo desde Appian
     remision: event['remision'],
     factura: "", // si trae datos de RFC se considera como True
@@ -88,7 +88,7 @@ exports.handler = function(event, context, callback) {
         console.log(element);
     });
 
-    
+
 
     callback(null, {"message": "Cliente creado"});
 }
