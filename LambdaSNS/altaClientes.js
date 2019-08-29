@@ -97,7 +97,7 @@ exports.handler = function (event, context, callback) {
         apellido: "Olascoaga"
     }
     let xls = json2xls(prueba);
-    var bufferdata = new Buffer(xls)
+    var bufferdata = new Buffer(xls, 'binary')
 
     s3.putObject({
         "Body": bufferdata,
