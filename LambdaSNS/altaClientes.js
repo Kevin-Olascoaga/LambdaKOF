@@ -1,6 +1,6 @@
 let AWS = require('aws-sdk');
 const s3 = new AWS.S3();
-var json2csv = require('json2csv');
+var json2xls = require('json2xls');
 
 exports.handler = function (event, context, callback) {
 
@@ -89,9 +89,9 @@ exports.handler = function (event, context, callback) {
     // });
 
 
-    // let xls = json2xls(cliente);
-    let csv = json2csv(cliente);
-    var bufferdata = new Buffer(csv, 'binary')
+    let xls = json2xls(cliente);
+    // let csv = json2csv(cliente);
+    var bufferdata = new Buffer(xls, 'binary')
 
     s3.putObject({
         "Body": bufferdata,
