@@ -97,14 +97,12 @@ exports.handler = function (event, context, callback) {
         apellido: "Olascoaga"
     }
     let xls = json2xls(prueba);
-    var bufferdata = new Buffer(xls).toString('base64');
+    var bufferdata = new Buffer(xls)
 
     s3.putObject({
         "Body": bufferdata,
         "Bucket": "clienteskof",
-        "Key": "clientes.xlsx",
-        "ContentEncoding": 'base64',
-        "ContentType": 'application/vnd.ms-excel'
+        "Key": "clientes.xlsx"
     })
         .promise()
         .then(data => {
