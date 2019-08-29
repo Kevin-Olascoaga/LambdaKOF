@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "dependencies": {
     "request": "2.88.0",
-    "json2xls": "0.1.2"
+    "json2xls": "0.1.2",
+    "json2csv": "4.5.2"
   },
   "devDependencies": {
     "aws-sdk": "2.176.0"

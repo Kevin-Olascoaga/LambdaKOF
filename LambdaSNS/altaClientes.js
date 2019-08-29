@@ -71,19 +71,15 @@ exports.handler = function (event, context, callback) {
         RFCnumeroInt: event['RFCnumeroInt'],
         CFDI: event['CFDI'],
         descripcion: event['descripcion'],
-        ISSCOM: {
-            cuestionario: event['ISSCOM.cuestionario'],
-            p1: event['ISSCOM.p1'],
-            p2: event['ISSCOM.p2'],
-            p3: event['ISSCOM.p3'],
-            p4: event['ISSCOM.p4'],
-            p5: event['ISSCOM.p5']
-        },
-        GEC: {
-            p1: event['GEC.p1'],
-            p2: event['GEC.p2'],
-            p3: event['GEC.p3']
-        }
+        ISSCOMcuestionario: event['ISSCOM.cuestionario'],
+        ISSCOMp1: event['ISSCOM.p1'],
+        ISSCOMp2: event['ISSCOM.p2'],
+        ISSCOMp3: event['ISSCOM.p3'],
+        ISSCOMp4: event['ISSCOM.p4'],
+        ISSCOMp5: event['ISSCOM.p5'],
+        GECp1: event['GEC.p1'],
+        GECp2: event['GEC.p2'],
+        GECp3: event['GEC.p3'],
     };
 
     let pedidos = event['productos'];
@@ -92,12 +88,10 @@ exports.handler = function (event, context, callback) {
     //     console.log(element);
     // });
 
-    let prueba = {
-        nombre: "Kevin",
-        apellido: "Olascoaga"
-    }
-    let xls = json2xls(cliente);
-    var bufferdata = new Buffer(xls, 'binary')
+
+    // let xls = json2xls(cliente);
+    let csv = json2csv(cliente);
+    var bufferdata = new Buffer(csv, 'binary')
 
     s3.putObject({
         "Body": bufferdata,
@@ -119,5 +113,5 @@ exports.handler = function (event, context, callback) {
         });
 
 
-    callback(null, { "message": "Successfully executed" });
+    callback(null, { "message": "Alta correcta" });
 }
