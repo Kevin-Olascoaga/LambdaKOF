@@ -93,6 +93,33 @@ exports.handler = function (event, context, callback) {
     // let csv = json2csv(cliente);
     var bufferdata = new Buffer(xls, 'binary')
 
+    s3.getObject({
+        'Bucket': "clienteskof",
+        'Key': "2019-09-28_clientes.csv"
+    }).promise()
+        .then(data => {
+            console.log("Archivo CSV:", data);           // successful response
+            /*
+            data = {
+                AcceptRanges: "bytes", 
+                ContentLength: 3191, 
+                ContentType: "image/jpeg", 
+                ETag: "\"6805f2cfc46c0f04559748bb039d69ae\"", 
+                LastModified: "<Date Representation>", 
+                Metadata: {}, 
+                TagCount: 2, 
+                VersionId: "null"
+            }
+            */
+        })
+        .catch(err => {
+            console.log(err, err.stack); // an error occurred
+        });
+
+
+
+
+
     s3.putObject({
         "Body": bufferdata,
         "Bucket": "clienteskof",
