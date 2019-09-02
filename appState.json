@@ -166,8 +166,8 @@
         "config": {
           "runtime": "nodejs8.10",
           "handler": "handler",
-          "timeout": 123,
-          "memory": 128,
+          "timeout": 303,
+          "memory": 256,
           "layers": []
         },
         "triggers": [
@@ -519,7 +519,7 @@
     "projectRegion": "us-west-2",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1567466753697
+    "lastSave": 1567467106119
   },
   "VCS_STATE": {
     "provider": "GitHub",
