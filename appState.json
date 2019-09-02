@@ -65,7 +65,7 @@
         "children": [],
         "isRemovable": true,
         "filePath": "LambdaSNS/mail.js",
-        "code": "exports.handler = function(event, context, callback) {\n    \n    let to = event['to'];\n    let cc = event['cc'];\n    let bcc = event['bcc'];\n    let subject = event['subject'];\n    let body = event['body'];\n\n    callback(null, {\"message\": \"Successfully executed\"});\n\n}",
+        "code": "exports.handler = function(event, context, callback) {\n    \n    let to = event['to'];\n    let cc = event['cc'];\n    let bcc = event['bcc'];\n    let subject = event['subject'];\n    let body = event['body'];\n\n    callback(null, {\"message\": \"Correo enviado\"});\n\n}",
         "config": {
           "runtime": "nodejs8.10",
           "handler": "handler",
@@ -187,7 +187,7 @@
       "d208d08c-c661-4a9c-8b84-5a3be13c9a94",
       "75df272d-d232-43df-9648-86a980f1a19c"
     ],
-    "currentFileId": "b05d9142-3d79-4cdf-808a-f24a51e5030c",
+    "currentFileId": "75df272d-d232-43df-9648-86a980f1a19c",
     "resources": {
       "apigusWest2SMSGatewaysendSMSpost": {
         "name": "apigusWest2SMSGatewaysendSMSpost",
@@ -443,7 +443,7 @@
     "projectRegion": "us-west-2",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1567437193177
+    "lastSave": 1567437665938
   },
   "VCS_STATE": {
     "provider": "GitHub",

@@ -6,6 +6,6 @@ exports.handler = function(event, context, callback) {
     let subject = event['subject'];
     let body = event['body'];
 
-    callback(null, {"message": "Successfully executed"});
+    callback(null, {"message": "Correo enviado"});
 
 }
