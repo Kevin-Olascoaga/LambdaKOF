@@ -98,11 +98,11 @@ exports.handler = function (event, context, callback) {
         'Key': "2019-09-28_clientes.csv"
     }).promise()
         .then(data => {
-            var buf = Buffer.from(JSON.stringify(data.body));
-            var temp = JSON.parse(buf.toString());
+            // var buf = Buffer.from(JSON.stringify(data.body));
+            // var temp = JSON.parse(buf.toString());
             let archivo = data.body;
-            console.log("Archivo en buffer:", data.body);           // successful response
-            console.log("Archivo en json:", temp);
+            console.log("Archivo en buffer:", archivo);           // successful response
+            // console.log("Archivo en json:", temp);
             /*
             data = {
                 AcceptRanges: "bytes", 
