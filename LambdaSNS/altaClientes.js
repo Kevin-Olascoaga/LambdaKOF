@@ -9,7 +9,7 @@ const uuidv4 = require('uuid/v4');
 var mysql = require('mysql');
 
 exports.handler = function (event, context, callback) {
-    console.log("evento", event.cliente)
+    
     let cliente = {
         //Back
         idOficinaMovil: event.cliente['idCliente'], //Identificador aleatorio para OM (16)
