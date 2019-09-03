@@ -112,7 +112,8 @@ exports.handler = function (event, context, callback) {
         host     : "kof.cmk4tzokwqsd.us-west-2.rds.amazonaws.com",
         user     : "kofadmin",
         password : "CyEoDDTWfCtPY7h3NKzB",
-        port     : "3306"
+        port     : 3306,
+        database : "innodb",
     });
 
     connection.connect(function(err) {
@@ -122,9 +123,10 @@ exports.handler = function (event, context, callback) {
     }
 
     console.log('Connected to database.');
+    connection.end();
     });
 
-    connection.end();
+    
 
     // You can pass the existing connection to this function.
     // A new connection will be created if it's not present as the third param 
@@ -213,12 +215,16 @@ exports.handler = function (event, context, callback) {
     //     connection.end();
     // });
 
+
+
+
+
     // rds.query({
     //     instanceIdentifier: 'kof',
     //     query: 'INSERT INTO clientes(EVENTOGUID)',
     //     inserts: [
     //         cliente.EVENTOGUID,
-    //         ]
+    //     ]
     // }, function (error, results, connection) {
     //     if (error) {
     //         console.log("Error occurred");
@@ -230,6 +236,7 @@ exports.handler = function (event, context, callback) {
 
     //     connection.end();
     // });
+
 
     //////////////////////////////////////////////////////////////
 
