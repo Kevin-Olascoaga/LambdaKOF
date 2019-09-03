@@ -9,10 +9,10 @@ const uuidv4 = require('uuid/v4');
 var mysql = require('mysql');
 
 exports.handler = function (event, context, callback) {
-
+    console.log("evento", event.cliente)
     let cliente = {
         //Back
-        idOficinaMovil: event['cliente.idCliente'], //Identificador aleatorio para OM (16)
+        idOficinaMovil: event.cliente['idCliente'], //Identificador aleatorio para OM (16)
         EVENTOGUID: uuidv4(), // OMTEMP15
         VKORG: "0142", //Dato fijo de organización de ventas 0142
         KDGRP: "", //**Generar con el catalogo de codigo postal (indentificador)
@@ -29,58 +29,58 @@ exports.handler = function (event, context, callback) {
         //idCliente: event['idCliente'], //Generado incrementalmente desde Appian, temporal hasta que se tenga el definitivo de SAP
         //codigoCliente: event['codigoCliente'], //Usuario final que genera el transaccional
         //fechaAlta: event['fechaAlta'], //Generada por Appian
-        ZNAME1: event['cliente.nombreTienda'], //Capturada en Appian (Nombre de la tienda)
-        NAME_FIRST: event['cliente.nombreContacto'], //Capturado en Appian (Nombre del contacto)
-        NAME_LAST: event['cliente.apellidoContacto'], //Capturado en Appian (Apellido del contacto)
-        ZTELFIJO: event['cliente.telefono'], //Capturado en Appian (Telefono fijo)
-        ZCELULAR: event['cliente.celular'], //Capturado en Appian (telefono celular)
-        ZTELFIJO_CEL: event['cliente.celular'], //Capturado en Appian (telefono celular)
-        ZCORREO: event['cliente.correo'], //Capturado en Appian (cooreo electrónico)
-        ZZCRM_LAT: event['cliente.latitud'], //Capturado en Appian con gps (latitud)
-        ZZCRM_LONG: event['cliente.longitud'], //Capturado en Appian con gps (longitud)
-        ZCPOSTAL: event['cliente.codigoPostal'], //Capturado en Appian (codigo postal)
-        estado: event['cliente.estado'], //Capturado en Appian
+        ZNAME1: event.cliente['nombreTienda'], //Capturada en Appian (Nombre de la tienda)
+        NAME_FIRST: event.cliente['nombreContacto'], //Capturado en Appian (Nombre del contacto)
+        NAME_LAST: event.cliente['apellidoContacto'], //Capturado en Appian (Apellido del contacto)
+        ZTELFIJO: event.cliente['telefono'], //Capturado en Appian (Telefono fijo)
+        ZCELULAR: event.cliente['celular'], //Capturado en Appian (telefono celular)
+        ZTELFIJO_CEL: event.cliente['celular'], //Capturado en Appian (telefono celular)
+        ZCORREO: event.cliente['correo'], //Capturado en Appian (cooreo electrónico)
+        ZZCRM_LAT: event.cliente['latitud'], //Capturado en Appian con gps (latitud)
+        ZZCRM_LONG: event.cliente['longitud'], //Capturado en Appian con gps (longitud)
+        ZCPOSTAL: event.cliente['codigoPostal'], //Capturado en Appian (codigo postal)
+        estado: event.cliente['estado'], //Capturado en Appian
         ZESTPROV: "", //**buscar en catálogo (clave o id del estado)
-        ZMUNIDELEG: event['cliente.municipio'], //Capturado en Appian (municipio)
-        ZCOLONIA: event['cliente.colonia'], //Capturado en Appian (colonia)
-        ZCALLE: event['cliente.calle'], //Capturado en Appian (calle)
+        ZMUNIDELEG: event.cliente['municipio'], //Capturado en Appian (municipio)
+        ZCOLONIA: event.cliente['colonia'], //Capturado en Appian (colonia)
+        ZCALLE: event.cliente['calle'], //Capturado en Appian (calle)
         ZCALLECON: "", //dato dummy (callecon)
         ZENTRECALLE1: "", //dato dummy (entrecalle)
         ZENTRECALLE2: "",
-        ZNUMEXT: event['cliente.numeroExt'], //Capturado en Appian (número exterior)
+        ZNUMEXT: event.cliente['numeroExt'], //Capturado en Appian (número exterior)
         ZLOTE: "", //dato dummy
         ZMANZANA: "", //dato dummy
-        ZNUMINT: event['cliente.numeroInt'], //Capturado en Appian (número interior)
+        ZNUMINT: event.cliente['numeroInt'], //Capturado en Appian (número interior)
         ZENREJADO: "", //Capturado en Appian
         VPTYP: "ZPV", //**Catalogo de rutas (plan de visita de ruta de preventa)
-        ROUTE: event['cliente.rutaDeReparto'], //Capturado en Appian
+        ROUTE: event.cliente['rutaDeReparto'], //Capturado en Appian
         RUTA_REPARTO: "",
         //Visita
-        diasVisita: event['cliente.diasVisita'],
+        diasVisita: event.cliente['diasVisita'],
         SEQULUNES: "",
         SEQUMARTES: "",
         SEQUMIERCOLES: "",
         SEQUJUEVES: "",
         SEQUVIERNES: "",
         SEQUSABADO: "",
-        IDMETODO: event['cliente.rutaEntrega'], //se genera con catalogo de metodo desde Appian
-        ZREQREM: event['cliente.remision'], //Bit para remisión
+        IDMETODO: event.cliente['rutaEntrega'], //se genera con catalogo de metodo desde Appian
+        ZREQREM: event.cliente['remision'], //Bit para remisión
         ZREQFAC: "", // si trae datos de RFC se considera como True
         ZPAPERLESS: "",
-        ZFISICAMORAL: event['cliente.regimenFiscal'], //M2, M3 y M4 para persona física
-        ZNAME4: event['cliente.razonSocial'], //Ingresada en caso de que sea persona moral
-        ZRFCNOMBRE: event['cliente.RFCnombre'],
-        ZRFCAPELLIDOS: event['cliente.RFCapellidos'],
-        ZRFC: event['cliente.RFC'],
-        ZRFCCODIGOPOSTAL: event['cliente.RFCcodigoPostal'],
-        ZRFCESTADO: event['cliente.RFCestado'],
-        ZRFCMUNDELEG: event['cliente.RFCmunicipio'],
-        ZRFCCOLONIA: event['cliente.RFCcolonia'],
-        ZRFCCALLE: event['cliente.RFCcalle'],
+        ZFISICAMORAL: event.cliente['regimenFiscal'], //M2, M3 y M4 para persona física
+        ZNAME4: event.cliente['razonSocial'], //Ingresada en caso de que sea persona moral
+        ZRFCNOMBRE: event.cliente['RFCnombre'],
+        ZRFCAPELLIDOS: event.cliente['RFCapellidos'],
+        ZRFC: event.cliente['RFC'],
+        ZRFCCODIGOPOSTAL: event.cliente['RFCcodigoPostal'],
+        ZRFCESTADO: event.cliente['RFCestado'],
+        ZRFCMUNDELEG: event.cliente['RFCmunicipio'],
+        ZRFCCOLONIA: event.cliente['RFCcolonia'],
+        ZRFCCALLE: event.cliente['RFCcalle'],
         ZRFCCALLE_CON: "",
-        ZRFCNUM_EXT: event['cliente.RFCnumeroExt'],
-        ZRFCNUM_INT: event['cliente.RFCnumeroInt'],
-        ZCFDI: event['cliente.CFDI'],
+        ZRFCNUM_EXT: event.cliente['RFCnumeroExt'],
+        ZRFCNUM_INT: event.cliente['RFCnumeroInt'],
+        ZCFDI: event.cliente['CFDI'],
         //descripcion: event['descripcion'],
         ISSCOM: "",
         GEC: "",
@@ -89,15 +89,15 @@ exports.handler = function (event, context, callback) {
     };
 
     let cuestionarios = {
-        ISSCOMcuestionario: event['cliente.ISSCOM.cuestionario'],
-        ISSCOMp1: event['cliente.ISSCOM.p1'],
-        ISSCOMp2: event['cliente.ISSCOM.p2'],
-        ISSCOMp3: event['cliente.ISSCOM.p3'],
-        ISSCOMp4: event['cliente.ISSCOM.p4'],
-        ISSCOMp5: event['cliente.ISSCOM.p5'],
-        GECp1: event['cliente.GEC.p1'],
-        GECp2: event['cliente.GEC.p2'],
-        GECp3: event['cliente.GEC.p3'],
+        ISSCOMcuestionario: event.cliente.ISSCOM['cuestionario'],
+        ISSCOMp1: event.cliente.ISSCOM['p1'],
+        ISSCOMp2: event.cliente.ISSCOM['p2'],
+        ISSCOMp3: event.cliente.ISSCOM['p3'],
+        ISSCOMp4: event.cliente.ISSCOM['p4'],
+        ISSCOMp5: event.cliente.ISSCOM['p5'],
+        GECp1: event.cliente.GEC['p1'],
+        GECp2: event.cliente.GEC['p2'],
+        GECp3: event.cliente.GEC['p3'],
     };
 
     let pedidos = event['productos'];
