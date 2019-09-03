@@ -118,7 +118,7 @@ exports.handler = function (event, context, callback) {
 
     connection.connect(function(err) {
     if (err) {
-        console.error('Database connection failed: ' + err.stack);
+        console.error('Database connection failed : ' + err.stack);
         return;
     }
 
