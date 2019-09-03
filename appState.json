@@ -10,7 +10,6 @@
         "children": [
           "d208d08c-c661-4a9c-8b84-5a3be13c9a94",
           "05bfcffd-9744-4f23-89d0-3ce97fd8f097",
-          "4d68f474-8705-43b9-bfab-301d2efece87",
           "a0427590-749e-4c7c-a1c9-c666864ec1ba",
           "b05d9142-3d79-4cdf-808a-f24a51e5030c",
           "30550c2b-0a41-421f-ae44-6b0f1a4595dc"
@@ -76,30 +75,6 @@
         "triggers": [
           {
             "resourceName": "apigusWest2GeoGatewaygeocoderpost",
-            "config": {}
-          }
-        ]
-      },
-      "4d68f474-8705-43b9-bfab-301d2efece87": {
-        "id": "4d68f474-8705-43b9-bfab-301d2efece87",
-        "parent": "2c2fe5a7-7a86-4aa0-beb8-43c1c8b5437f",
-        "name": "clientes.js",
-        "type": "JS_LAMBDA",
-        "isDirectory": false,
-        "children": [],
-        "isRemovable": true,
-        "filePath": "LambdaSNS/clientes.js",
-        "code": "exports.handler = function(event, context, callback) {\n    \n    let cliente = {\n        //Back\n    idOficinaMovil: \"\", //Identificador aleatorio para OM (16)\n    orgVentas: \"0142\", //Dato fijo de organización de ventas 0142\n    region: \"\", //**Generar con el catalogo de codigo postal\n    distribuidora: \"\", //**Generar con el catalogo de codigo postal\n    KUNNR: \"CD00000000\", //Dato fijo para clientes nuevos\n    idSolicitud: \"\", //Generar aleatorio (22),\n    solicitudAlta: \"ZB18\", //Dato fijo para altas de cliente\n    rutaPreventa: \"\", //**Generar con el catalogo de rutas\n    nota: \".\", //Se solicita en la mascara de clientes\n    fechaCreacion: \"\", //Extraer con la información de fechaAlta\n    horaCreacion: \"\", //Extraer con la información de fechaAlta\n        //Front Appian\n    idCliente: event['idCliente'], //Generado incrementalmente desde Appian, temporal hasta que se tenga el definitivo de SAP\n    codigoCliente: event['codigoCliente'], //Usuario final que genera el transaccional\n    fechaAlta: event['fechaAlta'], //Generada por Appian\n    nombreTienda: event['nombreTienda'], //Capturada en Appian\n    nombreContacto: event['nombreContacto'], //Capturado en Appian\n    apellidoContacto: event['apellidoContacto'], //Capturado en Appian\n    felfijo: event['telefono'], //Capturado en Appian\n    celular: event['celular'], //Capturado en Appian\n    telfijo_cel: event['celular'],\n    correo: event['correo'], //Capturado en Appian\n    latitud: event['latitud'], //Capturado en Appian con gps\n    longitud: event['longitud'], //Capturado en Appian con gps\n    codigoPostal: event['codigoPostal'], //Capturado en Appian\n    estado: event['estado'], //Capturado en Appian\n    claveEstado: \"\", //**buscar en catálogo\n    municipio: event['municipio'], //Capturado en Appian\n    colonia: event['colonia'], //Capturado en Appian\n    calle: event['calle'], //Capturado en Appian\n    callecon: \".\", //dato dummy\n    entrecalle1: \".\", //dato dummy\n    numeroExt: event['numeroExt'], //Capturado en Appian\n    lote: \".\", //dato dummy\n    manzana: \".\", //dato dummy\n    numeroInt: event['numeroInt'], //Capturado en Appian\n    enrejado: \"\", //Capturado en Appian\n    planVisitaRutaPreventa: \"\", //**Catalogo de rutas\n    rutaDeReparto: event['rutaDeReparto'], //Capturado en Appian\n        //Visita\n    diasVisita: event['diasVisita'],\n    lunes: \"\",\n    martes: \"\",\n    miercoles: \"\",\n    jueves: \"\",\n    viernes: \"\",\n    sabado: \"\",\n    diaEntrega: event['rutaEntrega'], //se genera con catalogo de metodo desde Appian\n    remision: event['remision'],\n    factura: \"\", // si trae datos de RFC se considera como True\n    noImpresion: \"\",\n    regimenFiscal: event['regimenFiscal'],\n    razonSocial: event['razonSocial'], //Ingresada en caso de que sea persona moral\n    RFCnombre: event['RFCnombre'],\n    RFCapellidos: event['RFCapellidos'],\n    RFC: event['RFC'],\n    RFCcodigoPostal: event['RFCcodigoPostal'],\n    RFCestado: event['RFCestado'],\n    RFCmunicipio: event['RFCmunicipio'],\n    RFCcolonia: event['RFCcolonia'],\n    RFCcalle: event['RFCcalle'],\n    RFCnumeroExt: event['RFCnumeroExt'],\n    RFCnumeroInt: event['RFCnumeroInt'],\n    CFDI: event['CFDI'],\n    descripcion: event['descripcion'],\n    ISSCOM: {\n        cuestionario: event['ISSCOM.cuestionario'],\n        p1: event['ISSCOM.p1'],\n        p2: event['ISSCOM.p2'],\n        p3: event['ISSCOM.p3'],\n        p4: event['ISSCOM.p4'],\n        p5: event['ISSCOM.p5'] \n        },\n    GEC: {\n        p1: event['GEC.p1'],\n        p2: event['GEC.p2'],\n        p3: event['GEC.p3']\n        }\n    };\n\n    let pedidos = event['productos'];\n\n    pedidos.forEach(function(element) {\n        console.log(element);\n    });\n\n\n\n    callback(null, {\"message\": \"Cliente creado\"});\n}",
-        "config": {
-          "runtime": "nodejs8.10",
-          "handler": "handler",
-          "timeout": 60,
-          "memory": 128,
-          "layers": []
-        },
-        "triggers": [
-          {
-            "resourceName": "apigusWest2ClientesGatewayaltaClientespost",
             "config": {}
           }
         ]
@@ -173,11 +148,10 @@
       }
     },
     "deletedFiles": [
-      "LambdaSNS/mail.js"
+      "LambdaSNS/clientes.js"
     ],
     "rootNode": "2c2fe5a7-7a86-4aa0-beb8-43c1c8b5437f",
     "openFiles": [
-      "4d68f474-8705-43b9-bfab-301d2efece87",
       "05bfcffd-9744-4f23-89d0-3ce97fd8f097",
       "a0427590-749e-4c7c-a1c9-c666864ec1ba",
       "b05d9142-3d79-4cdf-808a-f24a51e5030c",
@@ -519,7 +493,7 @@
     "projectRegion": "us-west-2",
     "platform": "AWS",
     "platformRegions": {},
-    "lastSave": 1567537189349
+    "lastSave": 1567537388210
   },
   "VCS_STATE": {
     "provider": "GitHub",
