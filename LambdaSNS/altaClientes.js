@@ -123,18 +123,95 @@ exports.handler = function (event, context, callback) {
     }
 
     console.log('Connected to database.');
-    connection.end();
-    });
-
     
+    // var sql = 'INSERT INTO clientes(EVENTOGUID) VALUES ?';
+    var sql = 'INSERT INTO clientes(idOficinaMovil,EVENTOGUID,VKORG,KDGRP,BZIRK,KUNNR,ID_Solicitud,ID_Motivo_Solicitud,ZTEXT,ZFECHA,ZHORA,fechaSolicitud,ZNAME1,NAME_FIRST,NAME_LAST,ZTELFIJO,ZCELULAR,ZTELFIJO_CEL,ZCORREO,ZZCRM_LAT,ZZCRM_LONG,ZCPOSTAL,estado,ZESTPROV,ZMUNIDELEG,ZCOLONIA,ZCALLE,ZCALLECON,ZENTRECALLE1,ZENTRECALLE2,ZNUMEXT,ZLOTE,ZMANZANA,ZNUMINT,ZENREJADO,VPTYP,ROUTE,RUTA_REPARTO,diasVisita,SEQULUNES,SEQUMARTES,SEQUMIERCOLES,SEQUJUEVES,SEQUVIERNES,SEQUSABADO,IDMETODO,ZREQREM,ZREQFAC,ZPAPERLESS,ZFISICAMORAL,ZNAME4,ZRFCNOMBRE,ZRFCAPELLIDOS,ZRFC,ZRFCCODIGOPOSTAL,ZRFCESTADO,ZRFCMUNDELEG,ZRFCCOLONIA,ZRFCCALLE,ZRFCCALLE_CON,ZRFCNUM_EXT,ZRFCNUM_INT,ZCFDI,ISSCOM,GEC,LOCALIDAD,OCASIONDECONSUMO) VALUES ?';
+    var values = [[
+            cliente.idOficinaMovil,
+            cliente.EVENTOGUID,
+            cliente.VKORG,
+            cliente.KDGRP,
+            cliente.BZIRK,
+            cliente.KUNNR,
+            cliente.ID_Solicitud,
+            cliente.ID_Motivo_Solicitud,
+            cliente.ZTEXT,
+            cliente.ZFECHA,
+            cliente.ZHORA,
+            cliente.fechaSolicitud,
+            cliente.ZNAME1,
+            cliente.NAME_FIRST,
+            cliente.NAME_LAST,
+            cliente.ZTELFIJO,
+            cliente.ZCELULAR,
+            cliente.ZTELFIJO_CEL,
+            cliente.ZCORREO,
+            cliente.ZZCRM_LAT,
+            cliente.ZZCRM_LONG,
+            cliente.ZCPOSTAL,
+            cliente.estado,
+            cliente.ZESTPROV,
+            cliente.ZMUNIDELEG,
+            cliente.ZCOLONIA,
+            cliente.ZCALLE,
+            cliente.ZCALLECON,
+            cliente.ZENTRECALLE1,
+            cliente.ZENTRECALLE2,
+            cliente.ZNUMEXT,
+            cliente.ZLOTE,
+            cliente.ZMANZANA,
+            cliente.ZNUMINT,
+            cliente.ZENREJADO,
+            cliente.VPTYP,
+            cliente.ROUTE,
+            cliente.RUTA_REPARTO,
+            cliente.diasVisita,
+            cliente.SEQULUNES,
+            cliente.SEQUMARTES,
+            cliente.SEQUMIERCOLES,
+            cliente.SEQUJUEVES,
+            cliente.SEQUVIERNES,
+            cliente.SEQUSABADO,
+            cliente.IDMETODO,
+            cliente.ZREQREM,
+            cliente.ZREQFAC,
+            cliente.ZPAPERLESS,
+            cliente.ZFISICAMORAL,
+            cliente.ZNAME4,
+            cliente.ZRFCNOMBRE,
+            cliente.ZRFCAPELLIDOS,
+            cliente.ZRFC,
+            cliente.ZRFCCODIGOPOSTAL,
+            cliente.ZRFCESTADO,
+            cliente.ZRFCMUNDELEG,
+            cliente.ZRFCCOLONIA,
+            cliente.ZRFCCALLE,
+            cliente.ZRFCCALLE_CON,
+            cliente.ZRFCNUM_EXT,
+            cliente.ZRFCNUM_INT,
+            cliente.ZCFDI,
+            cliente.ISSCOM,
+            cliente.GEC,
+            cliente.LOCALIDAD,
+            cliente.OCASIONDECONSUMO
+            ]];
+
+        connection.query(sql, [values], function (err, result) {
+    
+    if (err) throw err;
+    console.log("Number of records inserted: " + result.affectedRows);
+    connection.end();
+  });
+  });
+
 
     // You can pass the existing connection to this function.
     // A new connection will be created if it's not present as the third param 
     // You must always end/destroy the DB connection after it's used
-    // rds.query({
-    //     instanceIdentifier: 'kof',
-    //     query: 'INSERT INTO clientes(idOficinaMovil,EVENTOGUID,VKORG,KDGRP,KDGRP,BZIRK,KUNNR,ID_Solicitud,ID_Motivo_Solicitud,ZTEXT,ZFECHA,ZHORA,fechaSolicitud,ZNAME1,NAME_FIRST,NAME_LAST,ZTELFIJO,ZCELULAR,ZTELFIJO_CEL,ZCORREO,ZZCRM_LAT,ZZCRM_LONG,ZCPOSTAL,estado,ZESTPROV,ZMUNIDELEG,ZCOLONIA,ZCALLE,ZCALLECON,ZENTRECALLE1,ZENTRECALLE2,ZNUMEXT,ZLOTE,ZMANZANA,ZNUMINT,ZENREJADO,VPTYP,ROUTE,RUTA_REPARTO,diasVisita,SEQULUNES,SEQUMARTES,SEQUMIERCOLES,SEQUJUEVES,SEQUVIERNES,SEQUSABADO,IDMETODO,ZREQREM,ZREQFAC,ZPAPERLESS,ZFISICAMORAL,ZNAME4,ZRFCNOMBRE,ZRFCAPELLIDOS,ZRFC,ZRFCCODIGOPOSTAL,ZRFCESTADO,ZRFCMUNDELEG,ZRFCCOLONIA,ZRFCCALLE,ZRFCCALLE_CON,ZRFCNUM_EXT,ZRFCNUM_INT,ZCFDI,ISSCOM,GEC,LOCALIDAD,OCASIONDECONSUMO)',
-    //     inserts: [
+    // connection.query({
+    //     // instanceIdentifier: 'kof',
+    //     query: 'INSERT INTO clientes(idOficinaMovil,EVENTOGUID,VKORG,KDGRP,KDGRP,BZIRK,KUNNR,ID_Solicitud,ID_Motivo_Solicitud,ZTEXT,ZFECHA,ZHORA,fechaSolicitud,ZNAME1,NAME_FIRST,NAME_LAST,ZTELFIJO,ZCELULAR,ZTELFIJO_CEL,ZCORREO,ZZCRM_LAT,ZZCRM_LONG,ZCPOSTAL,estado,ZESTPROV,ZMUNIDELEG,ZCOLONIA,ZCALLE,ZCALLECON,ZENTRECALLE1,ZENTRECALLE2,ZNUMEXT,ZLOTE,ZMANZANA,ZNUMINT,ZENREJADO,VPTYP,ROUTE,RUTA_REPARTO,diasVisita,SEQULUNES,SEQUMARTES,SEQUMIERCOLES,SEQUJUEVES,SEQUVIERNES,SEQUSABADO,IDMETODO,ZREQREM,ZREQFAC,ZPAPERLESS,ZFISICAMORAL,ZNAME4,ZRFCNOMBRE,ZRFCAPELLIDOS,ZRFC,ZRFCCODIGOPOSTAL,ZRFCESTADO,ZRFCMUNDELEG,ZRFCCOLONIA,ZRFCCALLE,ZRFCCALLE_CON,ZRFCNUM_EXT,ZRFCNUM_INT,ZCFDI,ISSCOM,GEC,LOCALIDAD,OCASIONDECONSUMO) VALUES ?',
+    //     values: [
     //         cliente.idOficinaMovil,
     //         cliente.EVENTOGUID,
     //         cliente.VKORG,
@@ -216,11 +293,18 @@ exports.handler = function (event, context, callback) {
     // });
 
 
-
+    // You must always end/destroy the DB connection after it's used
+    // rds.beginTransaction({
+    //     instanceIdentifier: 'kof'
+    // }, function (error, connection) {
+    //     if (error) {
+    //         throw error;
+    //     }
+    // });
 
 
     // rds.query({
-    //     instanceIdentifier: 'kof',
+    //     instanceIdentifier: 'innodb',
     //     query: 'INSERT INTO clientes(EVENTOGUID)',
     //     inserts: [
     //         cliente.EVENTOGUID,
