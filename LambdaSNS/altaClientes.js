@@ -11,14 +11,13 @@ exports.handler = function (event, context, callback) {
     let cliente = {
         //Back
         idOficinaMovil: event.cliente['idCliente'], //Identificador aleatorio para OM (16)
-        EVENTOGUID: uuidv4(), // OMTEMP15
+        EVENTOGUID: "f07ea7f6-8bdd-4463-8cb4-c97cb40d6657", // OMTEMP15
         VKORG: "0142", //Dato fijo de organización de ventas 0142
         KDGRP: "", //**Generar con el catalogo de codigo postal (indentificador)
         BZIRK: "", //**Generar con el catalogo de codigo postal (Distrbuidora)
         KUNNR: "CD00000000", //Dato fijo para clientes nuevos (Número de cliente definitivo)
-        ID_Solicitud: "", //Generar aleatorio (22),
+        ID_Solicitud: event.cliente['idCliente'], //Generar aleatorio (22),
         ID_Motivo_Solicitud: "ZB18", //Dato fijo para altas de cliente
-        Route: "", //**Generar con el catalogo de rutas (Ruta de preventa)
         ZTEXT: "", //Se solicita en la mascara de clientes
         ZFECHA: "", //Extraer con la información de fechaAlta (Se coloca por .NET)
         ZHORA: "", //Extraer con la información de fechaAlta (Se coloca por .NET)
@@ -51,8 +50,8 @@ exports.handler = function (event, context, callback) {
         ZNUMINT: event.cliente['numeroInt'], //Capturado en Appian (número interior)
         ZENREJADO: "", //Capturado en Appian
         VPTYP: "ZPV", //**Catalogo de rutas (plan de visita de ruta de preventa)
-        ROUTE: event.cliente['rutaDeReparto'], //Capturado en Appian
-        RUTA_REPARTO: "",
+        ROUTE: event.cliente['rutaDePreventa'], //Capturado en Appian
+        RUTA_REPARTO: event.cliente['rutaDeReparto'],
         //Visita
         diasVisita: event.cliente['diasVisita'],
         SEQULUNES: "",
@@ -61,10 +60,10 @@ exports.handler = function (event, context, callback) {
         SEQUJUEVES: "",
         SEQUVIERNES: "",
         SEQUSABADO: "",
-        IDMETODO: event.cliente['rutaEntrega'], //se genera con catalogo de metodo desde Appian
-        ZREQREM: event.cliente['remision'], //Bit para remisión
-        ZREQFAC: "", // si trae datos de RFC se considera como True
-        ZPAPERLESS: "",
+        IDMETODO: event.cliente['diaEntrega'], //se genera con catalogo de metodo desde Appian
+        ZREQREM: event.cliente['reqRemision'], //Bit para remisión
+        ZREQFAC: event.cliente['reqFactura'], // si trae datos de RFC se considera como True
+        ZPAPERLESS: event.cliente['noImpresion'],
         ZFISICAMORAL: event.cliente['regimenFiscal'], //M2, M3 y M4 para persona física
         ZNAME4: event.cliente['razonSocial'], //Ingresada en caso de que sea persona moral
         ZRFCNOMBRE: event.cliente['RFCnombre'],
@@ -122,14 +121,15 @@ exports.handler = function (event, context, callback) {
 
     console.log('Connected to database.');
 
-    var catalogo = 'SELECT * FROM catalogoCP WHERE ID_CODIGOP=' + cliente.ZCPOSTAL
-    connection.query(catalogo, function (err, result) {
+    var catalogoCP = 'SELECT * FROM catalogoCP WHERE ID_CODIGOP=' + cliente.ZCPOSTAL
+    connection.query(catalogoCP, function (err, result) {
     if (err) throw err;
     resultado = result[0];
     cliente.KDGRP = resultado.KDGRP
     cliente.BZIRK = resultado.BZIRK
     cliente.ZESTPROV = resultado.ID_ESTADO
   });
+
     
     // var sql = 'INSERT INTO prueba(EVENTOGUID) VALUES ?';
     var sql = 'INSERT INTO prueba(idOficinaMovil,EVENTOGUID,VKORG,KDGRP,BZIRK,KUNNR,ID_Solicitud,ID_Motivo_Solicitud,ZTEXT,ZFECHA,ZHORA,fechaSolicitud,ZNAME1,NAME_FIRST,NAME_LAST,ZTELFIJO,ZCELULAR,ZTELFIJO_CEL,ZCORREO,ZZCRM_LAT,ZZCRM_LONG,ZCPOSTAL,estado,ZESTPROV,ZMUNIDELEG,ZCOLONIA,ZCALLE,ZCALLECON,ZENTRECALLE1,ZENTRECALLE2,ZNUMEXT,ZLOTE,ZMANZANA,ZNUMINT,ZENREJADO,VPTYP,ROUTE,RUTA_REPARTO,diasVisita,SEQULUNES,SEQUMARTES,SEQUMIERCOLES,SEQUJUEVES,SEQUVIERNES,SEQUSABADO,IDMETODO,ZREQREM,ZREQFAC,ZPAPERLESS,ZFISICAMORAL,ZNAME4,ZRFCNOMBRE,ZRFCAPELLIDOS,ZRFC,ZRFCCODIGOPOSTAL,ZRFCESTADO,ZRFCMUNDELEG,ZRFCCOLONIA,ZRFCCALLE,ZRFCCALLE_CON,ZRFCNUM_EXT,ZRFCNUM_INT,ZCFDI,ISSCOM,GEC,LOCALIDAD,OCASIONDECONSUMO) VALUES ?';
