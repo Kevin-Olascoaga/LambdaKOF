@@ -16,12 +16,12 @@ exports.handler = function (event, context, callback) {
         KDGRP: "", //**Generar con el catalogo de codigo postal (indentificador)
         BZIRK: "", //**Generar con el catalogo de codigo postal (Distrbuidora)
         KUNNR: "CD00000000", //Dato fijo para clientes nuevos (Número de cliente definitivo)
-        ID_Solicitud: event.cliente['idCliente'], //Generar aleatorio (22),
+        ID_Solicitud: event.cliente['codigoCliente'], //Generar aleatorio (22),
         ID_Motivo_Solicitud: "ZB18", //Dato fijo para altas de cliente
         ZTEXT: "", //Se solicita en la mascara de clientes
         ZFECHA: "", //Extraer con la información de fechaAlta (Se coloca por .NET)
         ZHORA: "", //Extraer con la información de fechaAlta (Se coloca por .NET)
-        fechaSolicitud: "", //Extraer fecha de lambda
+        fechaSolicitud: event.cliente['fechaAlta'], //Extraer fecha de lambda
         //Front Appian
         //idCliente: event['idCliente'], //Generado incrementalmente desde Appian, temporal hasta que se tenga el definitivo de SAP
         //codigoCliente: event['codigoCliente'], //Usuario final que genera el transaccional
@@ -37,7 +37,7 @@ exports.handler = function (event, context, callback) {
         ZZCRM_LONG: event.cliente['longitud'], //Capturado en Appian con gps (longitud)
         ZCPOSTAL: event.cliente['codigoPostal'], //Capturado en Appian (codigo postal)
         estado: event.cliente['estado'], //Capturado en Appian
-        ZESTPROV: "", //**buscar en catálogo (clave o id del estado)
+        ZESTPROV: event.cliente['estado'], //**buscar en catálogo (clave o id del estado)
         ZMUNIDELEG: event.cliente['municipio'], //Capturado en Appian (municipio)
         ZCOLONIA: event.cliente['colonia'], //Capturado en Appian (colonia)
         ZCALLE: event.cliente['calle'], //Capturado en Appian (calle)
@@ -48,23 +48,23 @@ exports.handler = function (event, context, callback) {
         ZLOTE: "", //dato dummy
         ZMANZANA: "", //dato dummy
         ZNUMINT: event.cliente['numeroInt'], //Capturado en Appian (número interior)
-        ZENREJADO: "", //Capturado en Appian
+        ZENREJADO: event.cliente['enrejado'], //Capturado en Appian
         VPTYP: "ZPV", //**Catalogo de rutas (plan de visita de ruta de preventa)
         ROUTE: event.cliente['rutaDePreventa'], //Capturado en Appian
         RUTA_REPARTO: event.cliente['rutaDeReparto'],
         //Visita
         diasVisita: event.cliente['diasVisita'],
-        SEQULUNES: "",
-        SEQUMARTES: "",
-        SEQUMIERCOLES: "",
-        SEQUJUEVES: "",
-        SEQUVIERNES: "",
-        SEQUSABADO: "",
+        SEQULUNES: event.cliente['lunes'],
+        SEQUMARTES: event.cliente['martes'],
+        SEQUMIERCOLES: event.cliente['miercoles'],
+        SEQUJUEVES: event.cliente['jueves'],
+        SEQUVIERNES: event.cliente['viernes'],
+        SEQUSABADO: event.cliente['sabado'],
         IDMETODO: event.cliente['diaEntrega'], //se genera con catalogo de metodo desde Appian
-        ZREQREM: event.cliente['reqRemision'], //Bit para remisión
-        ZREQFAC: event.cliente['reqFactura'], // si trae datos de RFC se considera como True
+        ZREQREM: event.cliente['remision'], //Bit para remisión
+        ZREQFAC: event.cliente['factura'], // si trae datos de RFC se considera como True
         ZPAPERLESS: event.cliente['noImpresion'],
-        ZFISICAMORAL: event.cliente['regimenFiscal'], //M2, M3 y M4 para persona física
+        ZFISICAMORAL: event.cliente['RFCregimenFiscal'], //M2, M3 y M4 para persona física
         ZNAME4: event.cliente['razonSocial'], //Ingresada en caso de que sea persona moral
         ZRFCNOMBRE: event.cliente['RFCnombre'],
         ZRFCAPELLIDOS: event.cliente['RFCapellidos'],
@@ -99,11 +99,54 @@ exports.handler = function (event, context, callback) {
 
     let pedidos = event['productos'];
     let resultado;
+    let cat;
     // pedidos.forEach(function (element) {
     //     console.log(element);
     // });
 
-    //////////////////////SQL CONNECTION//////////////////////////
+///////////////////////////CUESTIONARIOS/////////////////////////
+switch(cuestionarios.ISSCOMcuestionario){
+    case '1': //CUESTIONARIO No. 1 - Home Market
+        if(cuestionarios.ISSCOMp1 == "A"){
+            cliente.ISSCOM = 2305; //HOGAR CON VENTA
+        }else{
+            switch(cuestionarios.ISSCOMp2){
+                case 'A':
+                    cliente.ISSCOM = 2104; //MISCELANEA
+                break;
+                case 'B':
+                    cliente.ISSCOM = 2101; //ABARROTE
+                break;
+                case 'C':
+                    cliente.ISSCOM = 2304; //FRUTAS Y VERDURAS
+                break;
+                case 'D':
+                    cliente.ISSCOM = 2301; //CARNICERÍA/POLLERÍA/PESCADERÍA
+                break;
+                case 'E':
+                    cliente.ISSCOM = 2202; //VINATERÍA
+                break;
+                case 'F':
+                    cliente.ISSCOM = 2306; //PANADERÍA
+                break;
+                case 'G':
+                    cliente.ISSCOM = 2309; //TIENDA ESPECIALIZADA (NATURISTA, VEGET.)
+                break;
+                case 'H':
+                    cliente.ISSCOM = 2310; //TORTILLERÍA
+                break;
+                case 'I':
+                    cliente.ISSCOM = 2201; //EXPENDIO DE CERVEZA
+                break;
+            }
+        }
+    break;
+}
+
+
+//////////////////////////////////////////////////////////////////
+
+//////////////////////////SQL CONNECTION//////////////////////////
 
     var connection = mysql.createConnection({
         host     : "kof.cmk4tzokwqsd.us-west-2.rds.amazonaws.com",
@@ -127,8 +170,11 @@ exports.handler = function (event, context, callback) {
     resultado = result[0];
     cliente.KDGRP = resultado.KDGRP
     cliente.BZIRK = resultado.BZIRK
-    cliente.ZESTPROV = resultado.ID_ESTADO
-  });
+    // cliente.ZESTPROV = resultado.ID_ESTADO
+    console.log("KDGRP", resultado.KDGRP);
+    console.log("BZIRK", resultado.BZIRK);
+    console.log("ZESTPROV", resultado.ID_ESTADO);
+  
 
     
     // var sql = 'INSERT INTO prueba(EVENTOGUID) VALUES ?';
@@ -205,194 +251,13 @@ exports.handler = function (event, context, callback) {
 
         connection.query(sql, [values], function (err, result) {
     
-    if (err) throw err;
-    console.log("Number of records inserted: " + result.affectedRows);
-    connection.end();
+        if (err) throw err;
+        console.log("Number of records inserted: " + result.affectedRows);
+        connection.end();
+        });
+        callback(null, { "mensaje": "Alta correcta" });
+    });
   });
-  });
 
-
-    // You can pass the existing connection to this function.
-    // A new connection will be created if it's not present as the third param 
-    // You must always end/destroy the DB connection after it's used
-    // connection.query({
-    //     // instanceIdentifier: 'kof',
-    //     query: 'INSERT INTO clientes(idOficinaMovil,EVENTOGUID,VKORG,KDGRP,KDGRP,BZIRK,KUNNR,ID_Solicitud,ID_Motivo_Solicitud,ZTEXT,ZFECHA,ZHORA,fechaSolicitud,ZNAME1,NAME_FIRST,NAME_LAST,ZTELFIJO,ZCELULAR,ZTELFIJO_CEL,ZCORREO,ZZCRM_LAT,ZZCRM_LONG,ZCPOSTAL,estado,ZESTPROV,ZMUNIDELEG,ZCOLONIA,ZCALLE,ZCALLECON,ZENTRECALLE1,ZENTRECALLE2,ZNUMEXT,ZLOTE,ZMANZANA,ZNUMINT,ZENREJADO,VPTYP,ROUTE,RUTA_REPARTO,diasVisita,SEQULUNES,SEQUMARTES,SEQUMIERCOLES,SEQUJUEVES,SEQUVIERNES,SEQUSABADO,IDMETODO,ZREQREM,ZREQFAC,ZPAPERLESS,ZFISICAMORAL,ZNAME4,ZRFCNOMBRE,ZRFCAPELLIDOS,ZRFC,ZRFCCODIGOPOSTAL,ZRFCESTADO,ZRFCMUNDELEG,ZRFCCOLONIA,ZRFCCALLE,ZRFCCALLE_CON,ZRFCNUM_EXT,ZRFCNUM_INT,ZCFDI,ISSCOM,GEC,LOCALIDAD,OCASIONDECONSUMO) VALUES ?',
-    //     values: [
-    //         cliente.idOficinaMovil,
-    //         cliente.EVENTOGUID,
-    //         cliente.VKORG,
-    //         cliente.KDGRP,
-    //         cliente.BZIRK,
-    //         cliente.KUNNR,
-    //         cliente.ID_Solicitud,
-    //         cliente.ID_Motivo_Solicitud,
-    //         cliente.ZTEXT,
-    //         cliente.ZFECHA,
-    //         cliente.ZHORA,
-    //         cliente.fechaSolicitud,
-    //         cliente.ZNAME1,
-    //         cliente.NAME_FIRST,
-    //         cliente.NAME_LAST,
-    //         cliente.ZTELFIJO,
-    //         cliente.ZCELULAR,
-    //         cliente.ZTELFIJO_CEL,
-    //         cliente.ZCORREO,
-    //         cliente.ZZCRM_LAT,
-    //         cliente.ZZCRM_LONG,
-    //         cliente.ZCPOSTAL,
-    //         cliente.estado,
-    //         cliente.ZESTPROV,
-    //         cliente.ZMUNIDELEG,
-    //         cliente.ZCOLONIA,
-    //         cliente.ZCALLE,
-    //         cliente.ZCALLECON,
-    //         cliente.ZENTRECALLE1,
-    //         cliente.ZENTRECALLE2,
-    //         cliente.ZNUMEXT,
-    //         cliente.ZLOTE,
-    //         cliente.ZMANZANA,
-    //         cliente.ZNUMINT,
-    //         cliente.ZENREJADO,
-    //         cliente.VPTYP,
-    //         cliente.ROUTE,
-    //         cliente.RUTA_REPARTO,
-    //         cliente.diasVisita,
-    //         cliente.SEQULUNES,
-    //         cliente.SEQUMARTES,
-    //         cliente.SEQUMIERCOLES,
-    //         cliente.SEQUJUEVES,
-    //         cliente.SEQUVIERNES,
-    //         cliente.SEQUSABADO,
-    //         cliente.IDMETODO,
-    //         cliente.ZREQREM,
-    //         cliente.ZREQFAC,
-    //         cliente.ZPAPERLESS,
-    //         cliente.ZFISICAMORAL,
-    //         cliente.ZNAME4,
-    //         cliente.ZRFCNOMBRE,
-    //         cliente.ZRFCAPELLIDOS,
-    //         cliente.ZRFC,
-    //         cliente.ZRFCCODIGOPOSTAL,
-    //         cliente.ZRFCESTADO,
-    //         cliente.ZRFCMUNDELEG,
-    //         cliente.ZRFCCOLONIA,
-    //         cliente.ZRFCCALLE,
-    //         cliente.ZRFCCALLE_CON,
-    //         cliente.ZRFCNUM_EXT,
-    //         cliente.ZRFCNUM_INT,
-    //         cliente.ZCFDI,
-    //         cliente.ISSCOM,
-    //         cliente.GEC,
-    //         cliente.LOCALIDAD,
-    //         cliente.OCASIONDECONSUMO
-    //         ]
-    // }, function (error, results, connection) {
-    //     if (error) {
-    //         console.log("Error occurred");
-    //         throw error;
-    //     } else {
-    //         console.log("Success")
-    //         console.log(results);
-    //     }
-
-    //     connection.end();
-    // });
-
-
-    // You must always end/destroy the DB connection after it's used
-    // rds.beginTransaction({
-    //     instanceIdentifier: 'kof'
-    // }, function (error, connection) {
-    //     if (error) {
-    //         throw error;
-    //     }
-    // });
-
-
-    // rds.query({
-    //     instanceIdentifier: 'innodb',
-    //     query: 'INSERT INTO clientes(EVENTOGUID)',
-    //     inserts: [
-    //         cliente.EVENTOGUID,
-    //     ]
-    // }, function (error, results, connection) {
-    //     if (error) {
-    //         console.log("Error occurred");
-    //         throw error;
-    //     } else {
-    //         console.log("Success")
-    //         console.log(results);
-    //     }
-
-    //     connection.end();
-    // });
-
-
-    //////////////////////////////////////////////////////////////
-
-
-    // let xls = json2xls(cliente);
-    // // let csv = json2csv(cliente);
-    // var bufferdata = new Buffer(xls, 'binary')
-    // console.log("bufferdata", bufferdata);
-    // s3.getObject({
-    //     'Bucket': "clienteskof",
-    //     'Key': "2019-09-28_clientes.csv"
-    // }).promise()
-    //     .then(data => {
-    //         // var buf = Buffer.from(JSON.stringify(data.Body));
-    //         // var temp = JSON.parse(buf.toString());
-    //         let stream = data.Body
-    //         // let archivo = csv().fromStream(stream);
-    //         console.log("Archivo en buffer:", stream.toJSON());           // successful response
-    //         // console.log("Archivo en buffer:", data.Body);
-    //         // console.log("Archivo en json:", temp);
-    //         /*
-    //         data = {
-    //             AcceptRanges: "bytes", 
-    //             ContentLength: 3191, 
-    //             ContentType: "image/jpeg", 
-    //             ETag: "\"6805f2cfc46c0f04559748bb039d69ae\"", 
-    //             LastModified: "<Date Representation>", 
-    //             Metadata: {}, 
-    //             TagCount: 2, 
-    //             VersionId: "null"
-    //         }
-    //         */
-    //     })
-    //     .catch(err => {
-    //         console.log(err, err.stack); // an error occurred
-    //     });
-
-    // // let stream = s3.getObject({
-    // //     'Bucket': "clienteskof",
-    // //     'Key': "2019-09-28_clientes.csv"
-    // // }).createReadStream();
-    // // const json = csv().fromStream(stream);
-    // // console.log("buffer json:", json)
-
-
-    // s3.putObject({
-    //     "Body": bufferdata,
-    //     "Bucket": "clienteskof",
-    //     "Key": "clientes.xlsx"
-    // })
-    //     .promise()
-    //     .then(data => {
-    //         console.log("Escritura correcta:", data);           // successful response
-    //         /*
-    //         data = {
-    //             ETag: "\"6805f2cfc46c0f04559748bb039d69ae\"",
-    //             VersionId: "pSKidl4pHBiNwukdbcPXAIs.sshFFOc0"
-    //         }
-    //         */
-    //     })
-    //     .catch(err => {
-    //         console.log(err, err.stack); // an error occurred
-    //     });
-
-
-    // callback(null, { "message": "Alta correcta" });
-    callback(null, cliente);
+    // callback(null, cliente);
 }
