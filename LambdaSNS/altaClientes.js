@@ -99,7 +99,7 @@ exports.handler = function (event, context, callback) {
     };
 
     let pedidos = event['productos'];
-
+    let resultado;
     // pedidos.forEach(function (element) {
     //     console.log(element);
     // });
@@ -121,6 +121,15 @@ exports.handler = function (event, context, callback) {
     }
 
     console.log('Connected to database.');
+
+    var catalogo = 'SELECT * FROM catalogoCP WHERE ID_CODIGOP=' + cliente.ZCPOSTAL
+    connection.query(catalogo, function (err, result) {
+    if (err) throw err;
+    resultado = result[0];
+    cliente.KDGRP = resultado.KDGRP
+    cliente.BZIRK = resultado.BZIRK
+    cliente.ZESTPROV = resultado.ID_ESTADO
+  });
     
     // var sql = 'INSERT INTO prueba(EVENTOGUID) VALUES ?';
     var sql = 'INSERT INTO prueba(idOficinaMovil,EVENTOGUID,VKORG,KDGRP,BZIRK,KUNNR,ID_Solicitud,ID_Motivo_Solicitud,ZTEXT,ZFECHA,ZHORA,fechaSolicitud,ZNAME1,NAME_FIRST,NAME_LAST,ZTELFIJO,ZCELULAR,ZTELFIJO_CEL,ZCORREO,ZZCRM_LAT,ZZCRM_LONG,ZCPOSTAL,estado,ZESTPROV,ZMUNIDELEG,ZCOLONIA,ZCALLE,ZCALLECON,ZENTRECALLE1,ZENTRECALLE2,ZNUMEXT,ZLOTE,ZMANZANA,ZNUMINT,ZENREJADO,VPTYP,ROUTE,RUTA_REPARTO,diasVisita,SEQULUNES,SEQUMARTES,SEQUMIERCOLES,SEQUJUEVES,SEQUVIERNES,SEQUSABADO,IDMETODO,ZREQREM,ZREQFAC,ZPAPERLESS,ZFISICAMORAL,ZNAME4,ZRFCNOMBRE,ZRFCAPELLIDOS,ZRFC,ZRFCCODIGOPOSTAL,ZRFCESTADO,ZRFCMUNDELEG,ZRFCCOLONIA,ZRFCCALLE,ZRFCCALLE_CON,ZRFCNUM_EXT,ZRFCNUM_INT,ZCFDI,ISSCOM,GEC,LOCALIDAD,OCASIONDECONSUMO) VALUES ?';
