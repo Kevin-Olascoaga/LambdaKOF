@@ -106,7 +106,7 @@ exports.handler = function (event, context, callback) {
 
 ///////////////////////////CUESTIONARIOS/////////////////////////
 switch(cuestionarios.ISSCOMcuestionario){
-    case '1': //CUESTIONARIO No. 1 - Home Market
+    case '1': //CUESTIONARIO No. 1 - Home Market - COMPRA DE ABARROTES Y PRODUCTOS BÁSICOS.
         if(cuestionarios.ISSCOMp1 == "A"){
             cliente.ISSCOM = 2305; //HOGAR CON VENTA
         }else{
@@ -140,6 +140,109 @@ switch(cuestionarios.ISSCOMcuestionario){
                 break;
             }
         }
+    break;
+    case '2': //CUESTIONARIO No. 2  Moderno / Home Market - COMPRA DE ABARROTES EN AUTOSERVICIOS Y CUENTAS CLAVE
+        if(cuestionarios.ISSCOMp1 == "A"){
+            switch(cuestionarios.ISSCOMp2){
+                case 'A':
+                    cliente.ISSCOM = 1103; //AUTOSERVICIO GRANDE
+                break;
+                case 'B':
+                    cliente.ISSCOM = 1104; //BODEGA AUTOSERVICIO
+                break;
+                case 'C':
+                    cliente.ISSCOM = 1105; //CLUB DE MEMBRESIA
+                break;
+                case 'D':
+                    cliente.ISSCOM = 1202; //TDC CADENA
+                break;
+                case 'E':
+                    cliente.ISSCOM = 1101; //AUTOSERVICIO CHICO
+                break;
+                case 'F':
+                    cliente.ISSCOM = 1106; //HIPERMERCADO
+                break;
+                case 'G':
+                    cliente.ISSCOM = 1102; //AUTOSERVICIO GOBIERNO
+                break;
+                case 'H':
+                    cliente.ISSCOM = 2102; //MINI SUPER CADENA
+                break;
+            }
+        }else{
+            if(cuestionarios.ISSCOMp3 == "A"){
+                if(cuestionarios.ISSCOMp4 == "A"){
+                    if(cuestionarios.ISSCOMp5 == "A"){
+                        cliente.ISSCOM = 2103; //MINI SUPER INDEPENDIENTE
+                    }else{
+                        cliente.ISSCOM = 2105; //TDC INDEPENDIENTE
+                    }
+                }else{
+                    if(cuestionarios.ISSCOMp5 == "A"){
+                        cliente.ISSCOM = 2103; //MINI SUPER INDEPENDIENTE
+                    }else{
+                        cliente.ISSCOM = 2105; //TDC INDEPENDIENTE
+                    }
+                }
+            }else{
+                if(cuestionarios.ISSCOMp4 == "A"){
+                    if(cuestionarios.ISSCOMp5 == "A"){
+                        cliente.ISSCOM = 2103; //MINI SUPER INDEPENDIENTE
+                    }else{
+                        cliente.ISSCOM = 2103; //MINI SUPER INDEPENDIENTE
+                    }
+                }else{
+                    if(cuestionarios.ISSCOMp5 == "A"){
+                        cliente.ISSCOM = 2103; //MINI SUPER INDEPENDIENTE
+                    }else{
+                        cliente.ISSCOM = 2103; //MINI SUPER INDEPENDIENTE
+                    }
+                }
+            }
+        }
+    break;
+    case '3': //CUESTIONARIO No. 3 - CANALES DE ENTRETENIMIENTO Y RECREACIÓN
+        switch(cuestionarios.ISSCOMp1){
+                case 'A':
+                    cliente.ISSCOM = 3801; //BILLAR
+                break;
+                case 'B':
+                    cliente.ISSCOM = 3803; //CINE/AUTOCINEMA
+                break;
+                case 'C':
+                    cliente.ISSCOM = 3605; //DISCOTECA
+                break;
+                case 'D':
+                    cliente.ISSCOM = 3701; //GIMNASIO
+                break;
+                case 'E':
+                    cliente.ISSCOM = 3804; //MUSEO
+                break;
+                case 'F':
+                    cliente.ISSCOM = 4003; //EXPOSICIONES
+                break;
+                case 'G':
+                    cliente.ISSCOM = 3806; //TEATRO
+                break;
+                case 'H':
+                    cliente.ISSCOM = 3809; //MÁQUINAS DE VIDEOJUEGOS
+                break;
+                case 'I':
+                    cliente.ISSCOM = 3808; //CASINO
+                break;
+                case 'J':
+                    cliente.ISSCOM = 3703; //ESTADIO
+                break;
+                case 'K':
+                    cliente.ISSCOM = 3805; //PARQUE DE DIVERSIONES
+                break;
+                case 'L':
+                    cliente.ISSCOM = 3704; //LOCALIDADES DEPORTIVAS
+                break;
+                case 'M':
+                    cliente.ISSCOM = ""; //OTROS
+                break;
+            }
     break;
 }
 
