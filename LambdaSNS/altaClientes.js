@@ -119,7 +119,7 @@ exports.handler = function (event, context, callback) {
         return;
     }
 
-    console.log('Conexión a la base de datos.');
+    console.log('Conexión a la base de datos');
 
     var catalogoCP = 'SELECT * FROM catalogoCP WHERE ID_CODIGOP=' + cliente.ZCPOSTAL
     connection.query(catalogoCP, function (err, result) {
