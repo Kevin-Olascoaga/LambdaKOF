@@ -246,6 +246,26 @@ switch(cuestionarios.ISSCOMcuestionario){
     break;
 }
 
+    ////////////GEC/////////////////
+    if(cuestionarios.GECp1 == "A"){
+        if(cuestionarios.GECp2 == "A"){
+            if(cuestionarios.GECp3 = "A"){
+                cliente.GEC = "52" //PLATA
+            }else{
+                cliente.GEC = "53" //BRONCE
+            }
+        }else{
+            if(cuestionarios.GECp3 = "A"){
+                cliente.GEC = "52" //PLATA
+            }else{
+                cliente.GEC = "52" //PLATA
+            }
+        }
+    }else{
+        cliente.GEC = "53" //BRONCE
+    }
+    //////////////////////////////////
+
 
 //////////////////////////////////////////////////////////////////
 
