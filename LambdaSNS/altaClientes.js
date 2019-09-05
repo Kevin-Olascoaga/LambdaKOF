@@ -244,6 +244,114 @@ switch(cuestionarios.ISSCOMcuestionario){
                 break;
             }
     break;
+    case '4': //CUESTIONARIO No. 4 - ESTABLECIMIENTOS PARA COMER Y BEBER
+        switch(cuestionarios.ISSCOMp1){
+            case 'A':
+                switch(cuestionarios.ISSCOMp3){
+                    case 'A':
+                        cliente.ISSCOM = 4601; //RSR HAMBURGUESAS
+                    break;
+                    case 'B':
+                        cliente.ISSCOM = 4602; //RSR PIZZAS
+                    break;
+                    case 'C':
+                        cliente.ISSCOM = 4603; //RSR POLLO
+                    break;
+                    case 'D':
+                        cliente.ISSCOM = 2308; //ROSTICERÍA
+                    break;
+                    case 'E':
+                        cliente.ISSCOM = 4604; //RSR TACOS
+                    break;
+                    case 'F':
+                        cliente.ISSCOM = 3301; //NEVERÍA, FUENTE DE SODAS
+                    break;
+                    case 'G':
+                        cliente.ISSCOM = 4607; //RSR TORTAS/ SANDWICHES
+                    break;
+                    case 'H':
+                        cliente.ISSCOM = 4101; //FONDA/LONCHERÍA/MERENDERO
+                    break;
+                    case 'I':
+                        cliente.ISSCOM = 4502; //RESTAURANTE
+                    break;
+                    case 'J':
+                        cliente.ISSCOM = 2302; //DULCERÍA
+                    break;
+                    case 'K':
+                        cliente.ISSCOM = 3301; //NEVERÍA, FUENTE DE SODAS
+                    break;
+                    case 'L':
+                        cliente.ISSCOM = 3601; //BAR/TABERNA/CANTINA
+                    break;
+                    case 'M':
+                        cliente.ISSCOM = 3604; //CENTRO NOCTURNO
+                    break;
+                    case 'N':
+                        cliente.ISSCOM = 3603; //PULQUERÍA/MEZCALERÍA
+                    break;
+                    case 'O':
+                        cliente.ISSCOM = 4606; //RSR MARISCOS
+                    break;
+                    case 'P':
+                        cliente.ISSCOM = 4605; //RSR FRITANGAS/ ANTOJITOS
+                    break;
+                    case 'Q':
+                        cliente.ISSCOM = 4501; //CAFETERÍA
+                    break;
+                }
+            break;
+            case 'B':
+                cliente.ISSCOM = 3106; //COMEDOR INDUSTRIAL
+            break;
+            case 'C':
+                cliente.ISSCOM = 3105; //COMEDOR DE OFICINA
+            break;
+        }
+    break;
+    case '5':
+        switch(cuestionarios.ISSCOMp1){
+            case 'A':
+                cliente.ISSCOM = 4701; //ASILO/ CASA HOGAR
+            break;
+            case 'B':
+                cliente.ISSCOM = 3101; //CARCEL/POLICÍA/BOMBEROS
+            break;
+            case 'C':
+                cliente.ISSCOM = 3109; //INSTALACIÓN MILITAR
+            break;
+            case 'D':
+                cliente.ISSCOM = 3102; //HOSPITAL DE GOBIERNO
+            break;
+            case 'E':
+                cliente.ISSCOM = 3103; //HOSPITAL PARTICULAR
+            break;
+            case 'F':
+                cliente.ISSCOM = 3104; //CLINICAS Y CONSULTORIOS MEDICOS
+            break;
+            case 'G':
+                cliente.ISSCOM = 3107; //INDUSTRIA/FÁBRICA
+            break;
+            case 'H':
+                cliente.ISSCOM = 3108; //INSTALACIÓN DE GOBIERNO
+            break;
+            case 'I':
+                cliente.ISSCOM = 3110; //OFICINA
+            break;
+            case 'J':
+                cliente.ISSCOM = 4708; //OFICINA POSTAL/CASETAS TELEFÓNICAS
+            break;
+            case 'K':
+                cliente.ISSCOM = 4712; //SERVICIOS PÚBLICOS
+            break;
+            case 'L':
+                cliente.ISSCOM = 4713; //SISTEMA DE TRANSPORTE PÚBLICO
+            break;
+            case 'M':
+                cliente.ISSCOM = 4710; //PARADEROS/SITIOS DE TAXI
+            break;
+                }
+    break;
 }
 
     ////////////GEC/////////////////
