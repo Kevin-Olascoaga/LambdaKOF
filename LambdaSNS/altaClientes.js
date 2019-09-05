@@ -50,7 +50,7 @@ exports.handler = function (event, context, callback) {
         ZNUMINT: event.cliente['numeroInt'], //Capturado en Appian (número interior)
         ZENREJADO: event.cliente['enrejado'], //Capturado en Appian
         VPTYP: "ZPV", //**Catalogo de rutas (plan de visita de ruta de preventa)
-        ROUTE: event.cliente['rutaDePreventa'], //Capturado en Appian
+        ROUTE: event.cliente['RutaDePreventa'], //Capturado en Appian
         RUTA_REPARTO: event.cliente['rutaDeReparto'],
         //Visita
         diasVisita: event.cliente['diasVisita'],
