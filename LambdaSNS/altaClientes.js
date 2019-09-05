@@ -309,7 +309,7 @@ switch(cuestionarios.ISSCOMcuestionario){
             break;
         }
     break;
-    case '5':
+    case '5': //CUESTIONARIO No. 5 - ACTIVIDADES LABORALES
         switch(cuestionarios.ISSCOMp1){
             case 'A':
                 cliente.ISSCOM = 4701; //ASILO/ CASA HOGAR
@@ -350,10 +350,196 @@ switch(cuestionarios.ISSCOMcuestionario){
             case 'M':
                 cliente.ISSCOM = 4710; //PARADEROS/SITIOS DE TAXI
             break;
+        }
+    break;
+    case '6': //CUESTIONARIO No. 6 - OTRAS COMPRAS DE PRODUCTOS Y SERVICIOS EN GENERAL
+        switch(cuestionarios.ISSCOMp1){
+            case 'A':
+                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - ELECTRODOMESTICOS
+            break;
+            case 'B':
+                if(cuestionarios.ISSCOMp2 == "A"){
+                    cliente.ISSCOM = 2303; //FARMACIA INDEPENDIENTE
+                }else{
+                    cliente.ISSCOM = 1201; //FARMACIA CADENA    
                 }
+            break;
+            case 'C':
+                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - JOYERIA
+            break;
+            case 'D':
+                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - LOTERIA Y PRONOSTICOS
+            break;
+            case 'E':
+                cliente.ISSCOM = 4402; //PUESTO DE REVISTAS/PERIÓDICOS
+            break;
+            case 'F':
+                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - MATERIAS PRIMAS
+            break;
+            case 'G':
+                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - MEERCERÍ Y JUGUETES
+            break;
+            case 'H':
+                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - MUEBLERÍA
+            break;
+            case 'I':
+                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - TIENDA DE REGALOS
+            break;
+            case 'J':
+                cliente.ISSCOM = 2307; //PAPELERÍA                               
+            break;
+            case 'K':
+                cliente.ISSCOM = 3402; //TIENDA DEPARTAMENTAL
+            break;
+            case 'L':
+                cliente.ISSCOM = 3807; //VIDEO CLUB
+            break;
+            case 'M':
+                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - ZAPATERÍA
+            break;
+            case 'N':
+                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - FLORERIA
+            break;
+            case 'O':
+                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - FERRETERIA/ TLAPALERIA/ PINTURAS
+            break;
+            case 'P':
+                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - EQUIPO DE COMPUTO
+            break;
+            case 'Q':
+                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - GAS
+            break;
+            case 'R':
+                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - OTROS PRODUCTOS
+            break;
+        }
+        switch(cuestionarios.ISSCOMp3){
+            case 'A':
+                cliente.ISSCOM = 4702; //AUTOLAVADO
+            break;
+            case 'B':
+                cliente.ISSCOM = 4703; //BANCO/SERVICIOS FINANCIEROS
+            break;
+            case 'C':
+                cliente.ISSCOM = 4704; //BELLEZA/CUIDADO PERSONAL
+            break;
+            case 'D':
+                cliente.ISSCOM = 4706; //ESTACIONAMIENTO
+            break;
+            case 'E':
+                cliente.ISSCOM = 4709; //SERVICIOS AL DETALLE - BAÑOS PUBLICOS
+            break;
+            case 'F':
+                cliente.ISSCOM = 4709; //SERVICIOS AL DETALLE - ESTUDIOS FOTOGRAFICOS
+            break;
+            case 'G':
+                cliente.ISSCOM = 4707; //GASOLINERA
+            break;
+            case 'H':
+                cliente.ISSCOM = 4709; //SERVICIOS AL DETALLE - AGENCIA DE VIAJES
+            break;
+            case 'I':
+                cliente.ISSCOM = 4709; //SERVICIOS AL DETALLE - TINTORERIA/ LAVANDERIA
+            break;
+            case 'J':
+                cliente.ISSCOM = 4201; //HOTEL/MOTEL
+            break;
+            case 'K':
+                cliente.ISSCOM = 4709; //SERVICIOS AL DETALLE - AA/ NEUROTICOS ANÓNIMOS
+            break;
+            case 'L':
+                cliente.ISSCOM = 4704; //BELLEZA/CUIDADO PERSONAL
+            break;
+            case 'M':
+                cliente.ISSCOM = 4705; //CAFÉ INTERNET
+            break;
+            case 'N':
+                cliente.ISSCOM = 4709; //SERVICIOS AL DETALLE - PANTEON, FUNERALES, ETC
+            break;
+            case 'O':
+                cliente.ISSCOM = 4801; //AEROLÍNEA
+            break;
+            case 'P':
+                cliente.ISSCOM = 4802; //LÍNEA DE AUTOBUSES
+            break;
+            case 'Q':
+                cliente.ISSCOM = 4709; //SERVICIOS AL DETALLE - OTROS SERVICIOS…
+            break;
+        }
+    break;
+    case '7': //CUESTIONARIO No. 7 - NEGOCIOS CON VENTA AL MAYOREO
+        switch(cuestionarios.ISSCOMp1){
+            case 'A':
+                cliente.ISSCOM = 6102; //CENTRAL DE ABASTOS
+            break;
+            case 'B':
+                cliente.ISSCOM = 7101; //VENTA VENDEDOR
+            break;
+            case 'C':
+                cliente.ISSCOM = 4001; //BANQUETES
+            break;
+            case 'D':
+                cliente.ISSCOM = 6201; //DISTRIBUIDOR
+            break;
+            case 'E':
+                cliente.ISSCOM = 3501; //HOGAR CONSUMO
+            break;
+            case 'F':
+                cliente.ISSCOM = 6101; //BODEGA EMBOTELLADOR CON VENTA AL PÚBLICO
+            break;
+            case 'G':
+                cliente.ISSCOM = 4002; //EVENTOS ESPECIALES
+            break;
+            case 'H':
+                cliente.ISSCOM = 6105; //MAYORISTA
+            break;
+            case 'I':
+                cliente.ISSCOM = 6104; //DEPÓSITO DE REFRESCOS
+            break;
+            case 'J':
+                cliente.ISSCOM = 7102; //RUTAS EXPERIENCIA
+            break;
+        }
+    break;
+    case '8': //CUESTIONARIO No. 8 - SOLO PARA ESCUELAS
+        switch(cuestionarios.ISSCOMp1){
+            case 'A':
+                cliente.ISSCOM = 3903; //PREESCOLAR/JARDÍN DE NIÑOS
+            break;
+            case 'B':
+                cliente.ISSCOM = 3905; //PRIMARIA PÚBLICA
+            break;
+            case 'C':
+                cliente.ISSCOM = 3904; //PRIMARIA PRIVADA
+            break;
+            case 'D':
+                cliente.ISSCOM = 3911; //SECUNDARIA PÚBLICA
+            break;
+            case 'E':
+                cliente.ISSCOM = 3910; //SECUNDARIA PRIVADA
+            break;
+            case 'F':
+                cliente.ISSCOM = 3907; //PREPA / BACHI / PÚBLICO
+            break;
+            case 'G':
+                cliente.ISSCOM = 3906; //PREPA / BACHI / PRIVADO
+            break;
+            case 'H':
+                cliente.ISSCOM = 3909; //UNIVERSIDAD PÚBLICA
+            break;
+            case 'I':
+                cliente.ISSCOM = 3908; //UNIVERSIDAD PRIVADA
+            break;
+            case 'J':
+                cliente.ISSCOM = 3901; //ESCUELA ESP. (ARTES/LENGUAS)
+            break;
+            case 'K':
+                cliente.ISSCOM = 3902; //ESCUELA TÉCNICA/COMERCIAL
+            break;
+        }
     break;
 }
-
+///////////////////////////////////////////////////////////////////
     ////////////GEC/////////////////
     if(cuestionarios.GECp1 == "A"){
         if(cuestionarios.GECp2 == "A"){
