@@ -1,4 +1,4 @@
-let SL_AWS = require('slappforge-sdk-aws');
+// let SL_AWS = require('slappforge-sdk-aws');
 let AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 var json2xls = require('json2xls');

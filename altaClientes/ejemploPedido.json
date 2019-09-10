@@ -1,0 +1,165 @@
+{
+    "idPedido": 6,
+    "productos": [
+      {
+        "idProductoPedido": 16,
+        "idProducto": {
+          "idProducto": 1,
+          "nombreProducto": "Coca-Cola",
+          "descripcionProducto": "335 ml",
+          "imagenProducto": {
+            "id": 36771
+          },
+          "ingredientesProducto": "",
+          "informacionNutricionalProducto": ""
+        },
+        "cantidad": 23,
+        "precio": ""
+      },
+      {
+        "idProductoPedido": 17,
+        "idProducto": {
+          "idProducto": 2,
+          "nombreProducto": "Coca-Cola",
+          "descripcionProducto": "2 L",
+          "imagenProducto": {
+            "id": 36770
+          },
+          "ingredientesProducto": "",
+          "informacionNutricionalProducto": ""
+        },
+        "cantidad": 23,
+        "precio": ""
+      },
+      {
+        "idProductoPedido": 18,
+        "idProducto": {
+          "idProducto": 3,
+          "nombreProducto": "Coca-Cola",
+          "descripcionProducto": "500 ml",
+          "imagenProducto": {
+            "id": 36772
+          },
+          "ingredientesProducto": "",
+          "informacionNutricionalProducto": ""
+        },
+        "cantidad": 23,
+        "precio": ""
+      },
+      {
+        "idProductoPedido": 19,
+        "idProducto": {
+          "idProducto": 4,
+          "nombreProducto": "Sidral Mundet",
+          "descripcionProducto": "3 L",
+          "imagenProducto": {
+            "id": 36773
+          },
+          "ingredientesProducto": "",
+          "informacionNutricionalProducto": ""
+        },
+        "cantidad": 23,
+        "precio": ""
+      },
+      {
+        "idProductoPedido": 20,
+        "idProducto": {
+          "idProducto": 5,
+          "nombreProducto": "ciel",
+          "descripcionProducto": "1 L",
+          "imagenProducto": {
+            "id": 36769
+          },
+          "ingredientesProducto": "",
+          "informacionNutricionalProducto": ""
+        },
+        "cantidad": 23,
+        "precio": ""
+      },
+      {
+        "idProductoPedido": 21,
+        "idProducto": {
+          "idProducto": 6,
+          "nombreProducto": "Santa Clara",
+          "descripcionProducto": "1 L",
+          "imagenProducto": {
+            "id": 36775
+          },
+          "ingredientesProducto": "",
+          "informacionNutricionalProducto": ""
+        },
+        "cantidad": 23,
+        "precio": ""
+      },
+      {
+        "idProductoPedido": 22,
+        "idProducto": {
+          "idProducto": 7,
+          "nombreProducto": "Del Valle",
+          "descripcionProducto": "1 L",
+          "imagenProducto": {
+            "id": 36776
+          },
+          "ingredientesProducto": "",
+          "informacionNutricionalProducto": ""
+        },
+        "cantidad": 23,
+        "precio": ""
+      }
+    ],
+    "cliente": {
+      "idCliente": 1,
+      "codigoCliente": "CLI_TEMP1",
+      "fechaAlta": "2019-08-26T15:06:59Z",
+      "nombreTienda": "Abarrotes Kevs",
+      "nombreContacto": "Kevin",
+      "apellidoContacto": "Olascoaga",
+      "telefono": "7771302351",
+      "celular": "7771302351",
+      "correo": "kolascoaga@minsait.com",
+      "latitud": 19.3585968,
+      "longitud": -99.2765121,
+      "codigoPostal": "01219",
+      "estado": "Ciudad de México",
+      "municipio": "Cuajimalpa",
+      "colonia": "Contader",
+      "calle": "Mario Pani",
+      "numeroExt": "100",
+      "numeroInt": "",
+      "rutaDeReparto": "RIZAE1",
+      "rutaDePreventa": "ZA0480",
+      "diaEntrega": 2,
+      "reqRemision": "",
+      "ruqFactura": "X",
+      "noImpresion": "X",
+      "regimenFiscal": "M3",
+      "razonSocial": "",
+      "RFCnombre": "Kevin",
+      "RFCapellidos": "Olascoaga",
+      "RFC": "OAOK9508022E2",
+      "RFCcodigoPostal": "11500",
+      "RFCestado": "CDM",
+      "RFCmunicipio": "Miguel Hidalgo",
+      "RFCcolonia": "Lomas Hermosa",
+      "RFCcalle": "Presa Salinillas",
+      "RFCnumeroExt": "69",
+      "RFCnumeroInt": "202",
+      "CFDI": "G03",
+      "descripcion": "",
+      "ISSCOM": {
+        "idCuestionario": 7,
+        "cuestionario": "3",
+        "p1": "B",
+        "p2": "",
+        "p3": "",
+        "p4": "",
+        "p5": ""
+      },
+      "GEC": {
+        "idCuestionario": 7,
+        "p1": "N",
+        "p2": "S",
+        "p3": "S"
+      }
+    }
+  }
