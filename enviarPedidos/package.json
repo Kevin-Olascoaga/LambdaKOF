@@ -1,8 +1,9 @@
 {
-  "name": "KOF",
+  "name": "kof",
   "version": "1.0.0",
   "dependencies": {
     "convert-array-to-csv": "^1.0.9",
+    "moment-timezone": "^0.5.26",
     "mysql": "2.17.1",
     "nodemailer": "^6.3.0"
   }

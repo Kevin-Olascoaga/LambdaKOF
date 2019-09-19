@@ -5,10 +5,19 @@
 // const csv = require('csvtojson');
 // const uuidv4 = require('uuid/v4');
 var mysql = require('mysql');
+var moment = require("moment-timezone");
 
 exports.handler = function (event, context, callback) {
     
-    let cliente = {
+////////////////////////////PEDIDOS///////////////////////////////
+let pedidos;
+let cliente;
+let cuestionarios;
+let productos = event['productos']; //Array de productos
+var date = new Date();
+
+if(productos){
+    cliente = {
         //Back
         idOficinaMovil: event.cliente['idCliente'], //Identificador aleatorio para OM (16)
         EVENTOGUID: "f07ea7f6-8bdd-4463-8cb4-c97cb40d6657", // OMTEMP15
@@ -19,9 +28,9 @@ exports.handler = function (event, context, callback) {
         ID_Solicitud: event.cliente['codigoCliente'], //Generar aleatorio (22),
         ID_Motivo_Solicitud: "ZB18", //Dato fijo para altas de cliente
         ZTEXT: "", //Se solicita en la mascara de clientes
-        ZFECHA: "", //Extraer con la información de fechaAlta (Se coloca por .NET)
-        ZHORA: "", //Extraer con la información de fechaAlta (Se coloca por .NET)
-        fechaSolicitud: event.cliente['fechaAlta'], //Extraer fecha de lambda
+        ZFECHA: moment(date.getTime()).tz("America/Mexico_City").format("YYYY-MM-DD"), //Extraer con la información de fechaAlta (Se coloca por .NET)
+        ZHORA: moment(date.getTime()).tz("America/Mexico_City").format("HH:mm:SS"), //Extraer con la información de fechaAlta (Se coloca por .NET)
+        fechaSolicitud: moment(date.getTime()).tz("America/Mexico_City").format("YYYY-MM-DD"), //event.cliente['fechaAlta'], //Extraer fecha de lambda
         //Front Appian
         //idCliente: event['idCliente'], //Generado incrementalmente desde Appian, temporal hasta que se tenga el definitivo de SAP
         //codigoCliente: event['codigoCliente'], //Usuario final que genera el transaccional
@@ -85,7 +94,7 @@ exports.handler = function (event, context, callback) {
         OCASIONDECONSUMO: ""
     };
 
-    let cuestionarios = {
+    cuestionarios = {
         ISSCOMcuestionario: event.cliente.ISSCOM['cuestionario'],
         ISSCOMp1: event.cliente.ISSCOM['p1'],
         ISSCOMp2: event.cliente.ISSCOM['p2'],
@@ -96,10 +105,120 @@ exports.handler = function (event, context, callback) {
         GECp2: event.cliente.GEC['p2'],
         GECp3: event.cliente.GEC['p3'],
     };
+    pedidos = [];
+    productos.forEach(element => {
+        let pedido = [
+            "ZY28", //pedido
+            cliente.fechaSolicitud + 1, //Fecha de entrega = fecha de hoy + 1
+            cliente.KUNNR, //cliente
+            cliente.KUNNR, //responsable de pago
+            cliente.KUNNR, //destinatario de mercancia
+            cliente.fechaSolicitud, //fecha de pedido
+            element.idProducto.formatoProducto, //material
+            element.cantidad, //cantidad
+            "CJ", // UM Unidad de medida
+            "MAN", //tipo de operación
+            "ZPV", // VPT
+            cliente.idOficinaMovil
+        ];
+        pedidos.push(pedido);
+    });
+}else{
+    cliente = {
+        //Back
+        idOficinaMovil: event['idCliente'], //Identificador aleatorio para OM (16)
+        EVENTOGUID: "f07ea7f6-8bdd-4463-8cb4-c97cb40d6657", // OMTEMP15
+        VKORG: "0142", //Dato fijo de organización de ventas 0142
+        KDGRP: "", //**Generar con el catalogo de codigo postal (indentificador)
+        BZIRK: "", //**Generar con el catalogo de codigo postal (Distrbuidora)
+        KUNNR: "CD00000000", //Dato fijo para clientes nuevos (Número de cliente definitivo)
+        ID_Solicitud: event['codigoCliente'], //Generar aleatorio (22),
+        ID_Motivo_Solicitud: "ZB18", //Dato fijo para altas de cliente
+        ZTEXT: "", //Se solicita en la mascara de clientes
+        ZFECHA: moment(date.getTime()).tz("America/Mexico_City").format("YYYY-MM-DD"), //Extraer con la información de fechaAlta (Se coloca por .NET)
+        ZHORA: moment(date.getTime()).tz("America/Mexico_City").format("HH:mm:SS"), //Extraer con la información de fechaAlta (Se coloca por .NET)
+        fechaSolicitud: moment(date.getTime()).tz("America/Mexico_City").format("YYYY-MM-DD"), //event['fechaAlta'], //Extraer fecha de lambda
+        //Front Appian
+        //idCliente: event['idCliente'], //Generado incrementalmente desde Appian, temporal hasta que se tenga el definitivo de SAP
+        //codigoCliente: event['codigoCliente'], //Usuario final que genera el transaccional
+        //fechaAlta: event['fechaAlta'], //Generada por Appian
+        ZNAME1: event['nombreTienda'], //Capturada en Appian (Nombre de la tienda)
+        NAME_FIRST: event['nombreContacto'], //Capturado en Appian (Nombre del contacto)
+        NAME_LAST: event['apellidoContacto'], //Capturado en Appian (Apellido del contacto)
+        ZTELFIJO: event['telefono'], //Capturado en Appian (Telefono fijo)
+        ZCELULAR: event['celular'], //Capturado en Appian (telefono celular)
+        ZTELFIJO_CEL: event['celular'], //Capturado en Appian (telefono celular)
+        ZCORREO: event['correo'], //Capturado en Appian (cooreo electrónico)
+        ZZCRM_LAT: event['latitud'], //Capturado en Appian con gps (latitud)
+        ZZCRM_LONG: event['longitud'], //Capturado en Appian con gps (longitud)
+        ZCPOSTAL: event['codigoPostal'], //Capturado en Appian (codigo postal)
+        estado: event['estado'], //Capturado en Appian
+        ZESTPROV: event['estado'], //**buscar en catálogo (clave o id del estado)
+        ZMUNIDELEG: event['municipio'], //Capturado en Appian (municipio)
+        ZCOLONIA: event['colonia'], //Capturado en Appian (colonia)
+        ZCALLE: event['calle'], //Capturado en Appian (calle)
+        ZCALLECON: "", //dato dummy (callecon)
+        ZENTRECALLE1: "", //dato dummy (entrecalle)
+        ZENTRECALLE2: "",
+        ZNUMEXT: event['numeroExt'], //Capturado en Appian (número exterior)
+        ZLOTE: "", //dato dummy
+        ZMANZANA: "", //dato dummy
+        ZNUMINT: event['numeroInt'], //Capturado en Appian (número interior)
+        ZENREJADO: event['enrejado'], //Capturado en Appian
+        VPTYP: "ZPV", //**Catalogo de rutas (plan de visita de ruta de preventa)
+        ROUTE: event['RutaDePreventa'], //Capturado en Appian
+        RUTA_REPARTO: event['rutaDeReparto'],
+        //Visita
+        diasVisita: event['diasVisita'],
+        SEQULUNES: event['lunes'],
+        SEQUMARTES: event['martes'],
+        SEQUMIERCOLES: event['miercoles'],
+        SEQUJUEVES: event['jueves'],
+        SEQUVIERNES: event['viernes'],
+        SEQUSABADO: event['sabado'],
+        IDMETODO: event['diaEntrega'], //se genera con catalogo de metodo desde Appian
+        ZREQREM: event['remision'], //Bit para remisión
+        ZREQFAC: event['factura'], // si trae datos de RFC se considera como True
+        ZPAPERLESS: event['noImpresion'],
+        ZFISICAMORAL: event['RFCregimenFiscal'], //M2, M3 y M4 para persona física
+        ZNAME4: event['razonSocial'], //Ingresada en caso de que sea persona moral
+        ZRFCNOMBRE: event['RFCnombre'],
+        ZRFCAPELLIDOS: event['RFCapellidos'],
+        ZRFC: event['RFC'],
+        ZRFCCODIGOPOSTAL: event['RFCcodigoPostal'],
+        ZRFCESTADO: event['RFCestado'],
+        ZRFCMUNDELEG: event['RFCmunicipio'],
+        ZRFCCOLONIA: event['RFCcolonia'],
+        ZRFCCALLE: event['RFCcalle'],
+        ZRFCCALLE_CON: "",
+        ZRFCNUM_EXT: event['RFCnumeroExt'],
+        ZRFCNUM_INT: event['RFCnumeroInt'],
+        ZCFDI: event['CFDI'],
+        //descripcion: event['descripcion'],
+        ISSCOM: "",
+        GEC: "",
+        LOCALIDAD: "",
+        OCASIONDECONSUMO: ""
+    };
+
+    cuestionarios = {
+        ISSCOMcuestionario: event.ISSCOM['cuestionario'],
+        ISSCOMp1: event.ISSCOM['p1'],
+        ISSCOMp2: event.ISSCOM['p2'],
+        ISSCOMp3: event.ISSCOM['p3'],
+        ISSCOMp4: event.ISSCOM['p4'],
+        ISSCOMp5: event.ISSCOM['p5'],
+        GECp1: event.GEC['p1'],
+        GECp2: event.GEC['p2'],
+        GECp3: event.GEC['p3'],
+    };
+}
+
+//////////////////////////////////////////////////////////////////
+    
 
     
     let resultado;
-    let cat;
     // pedidos.forEach(function (element) {
     //     console.log(element);
     // });
@@ -560,32 +679,6 @@ switch(cuestionarios.ISSCOMcuestionario){
     }
     //////////////////////////////////
 
-////////////////////////////PEDIDOS///////////////////////////////
-let pedidos;
-let productos = event['productos']; //Array de productos
-
-if(productos){
-    pedidos = [];
-    productos.forEach(element => {
-        let pedido = [
-            "ZY28", //pedido
-            cliente.fechaSolicitud + 1, //Fecha de entrega = fecha de hoy + 1
-            cliente.KUNNR, //cliente
-            cliente.KUNNR, //responsable de pago
-            cliente.KUNNR, //destinatario de mercancia
-            cliente.fechaSolicitud, //fecha de pedido
-            element.idProductoPedido, //material
-            element.cantidad, //cantidad
-            "CJ", // UM Unidad de medida
-            "MAN", //tipo de operación
-            "ZPV" // VPT
-        ];
-        pedidos.push(pedido);
-    });
-}
-
-//////////////////////////////////////////////////////////////////
-
 //////////////////////////////////////////////////////////////////
 
 //////////////////////////SQL CONNECTION//////////////////////////
@@ -620,7 +713,7 @@ if(productos){
 
     if(pedidos){
         console.log("Insertar pedidos");
-        var sqlPedidos = 'INSERT INTO pedidos(PEDIDO,`FECHA ENTREGA`,CLIENTE,`RESPONSABLE DE PAGO`,`DESTINATARIO DE MERCANCIA`,`FECHA DEL PEDIDO`,MATERIAL,CANTIDAD,UM,`TIPO OPERACIÓN`,VPT) VALUES ?'
+        var sqlPedidos = 'INSERT INTO pedidos(PEDIDO,`FECHA ENTREGA`,CLIENTE,`RESPONSABLE DE PAGO`,`DESTINATARIO DE MERCANCIA`,`FECHA DEL PEDIDO`,MATERIAL,CANTIDAD,UM,`TIPO OPERACIÓN`,VPT,idOficinaMovil) VALUES ?'
         var datos = pedidos;
         connection.query(sqlPedidos, [datos], function (err, result) {
     
@@ -710,7 +803,8 @@ if(productos){
         console.log("Number of records inserted: " + result.affectedRows);
         connection.end();
         });
-        callback(null, { "mensaje": "Alta correcta" });
+        // callback(null, { "mensaje": "Alta correcta" });
+        callback(null, cliente);
     }
     });
   });

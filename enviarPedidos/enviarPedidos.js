@@ -2,6 +2,7 @@ var aws = require('aws-sdk');
 var nodemailer = require('nodemailer');
 var mysql = require('mysql');
 const { convertArrayToCSV } = require('convert-array-to-csv');
+var moment = require("moment-timezone");
 
 var ses = new aws.SES();
 
@@ -23,21 +24,25 @@ exports.handler = function (event, context, callback) {
 
         console.log('Conexión a la base de datos');
         let hoy = new Date();
-        let diaF = hoy.getDate();
-        let mesF = hoy.getMonth()+1;
-        let añoF = hoy.getFullYear();
+        hoy = moment(hoy.getTime()).tz("America/Mexico_City").format("YYYY-MM-DD");
+        // let diaF = hoy.getDate();
+        // let mesF = hoy.getMonth()+1;
+        // let añoF = hoy.getFullYear();
         let ayer = new Date();
         ayer.setDate(ayer.getDate() - 1);
-        let diaI = ayer.getDate();
-        let mesI = ayer.getMonth()+1;
-        let añoI = ayer.getFullYear();
+        ayer = moment(ayer.getTime()).tz("America/Mexico_City").format("YYYY-MM-DD");
+        // let diaI = ayer.getDate();
+        // let mesI = ayer.getMonth()+1;
+        // let añoI = ayer.getFullYear();
         
         // let fechaInicio = new Date(añoI,mesI,diaI,17);
-        fechaInicio = añoI + "-" + mesI + "-" + diaI + " 17:00:00";
+        //let fechaInicio = añoI + "-" + mesI + "-" + diaI + " 17:00:00";
+        let fechaInicio = ayer + " 17:00:00";
         // let fechaFin = new Date(añoF,mesF,diaF,17);
-        fechaFin = añoF + "-" + mesF + "-" + diaF + " 17:00:00";
+        // let fechaFin = añoF + "-" + mesF + "-" + diaF + " 17:00:00";
+        let fechaFin = hoy + " 17:00:00";
         
-        var tablaPedidos = "SELECT * FROM pedidos WHERE FechaGenerada >= " + fechaInicio + " AND FechaGenerada < " + fechaFin;
+        var tablaPedidos = "SELECT * FROM pedidos WHERE FechaGenerada >= '" + fechaInicio + "' AND FechaGenerada < '" + fechaFin + "'";
         connection.query(tablaPedidos, function (err, result) {
             if (err) throw err;
             const header = ['PEDIDO', 'FECHA ENTREGA', 'CLIENTE', 'RESPONSABLE DE PAGO', 'DESTINATARIO DE MERCANCIA', 'FECHA DEL PEDIDO', 'MATERIAL', 'CANTIDAD', 'UM', 'TIPO OPERACIÓN', 'VPT'];
