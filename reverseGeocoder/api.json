@@ -1,0 +1,87 @@
+{
+    "results": [{
+        "address_components": [{
+                "long_name": "14",
+                "short_name": "14",
+                "types": [
+                    "street_number"
+                ],
+            },
+            {
+                "long_name": "Ignacio Maya",
+                "short_name": "Ignacio Maya",
+                "types": [
+                    "route"
+                ],
+            },
+            {
+                "long_name": "Miguel Alemán",
+                "short_name": "Miguel Alemán",
+                "types": [
+                    "political",
+                    "sublocality",
+                    "sublocality_level_1"
+                ],
+            },
+            {
+                "long_name": "Zacatepec de Hidalgo",
+                "short_name": "Zacatepec de Hidalgo",
+                "types": [
+                    "locality",
+                    "political"
+                ],
+            },
+            {
+                "long_name": "Morelos",
+                "short_name": "Mor.",
+                "types": [
+                    "administrative_area_level_1",
+                    "political"
+                ],
+            },
+            {
+                "long_name": "Mexico",
+                "short_name": "MX",
+                "types": [
+                    "country",
+                    "political"
+                ],
+            },
+            {
+                "long_name": "62780",
+                "short_name": "62780",
+                "types": [
+                    "postal_code"
+                ],
+            }
+        ],
+        "formatted_address": "Ignacio Maya 14, Miguel Alemán, 62780 Zacatepec de Hidalgo, Mor., Mexico",
+        "geometry": {
+            "location": {
+                "lat": 18.6641642,
+                "lng": -99.1881765
+            },
+            "location_type": "ROOFTOP",
+            "viewport": {
+                "northeast": {
+                    "lat": 18.6655131802915,
+                    "lng": -99.1868275197085
+                },
+                "southwest": {
+                    "lat": 18.6628152197085,
+                    "lng": -99.18952548029151
+                }
+            }
+        },
+        "partial_match": true,
+        "place_id": "ChIJi2w2OVh_zoURN3IzuZMU22E",
+        "plus_code": {
+            "compound_code": "MR76+MP Zacatepec de Hidalgo, Morelos, Mexico",
+            "global_code": "76C2MR76+MP"
+        },
+        "types": [
+            "street_address"
+        ],
+    }],
+    "status": "OK"
+}

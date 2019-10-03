@@ -27,10 +27,10 @@ if(productos){
         KUNNR: "CD00000000", //Dato fijo para clientes nuevos (Número de cliente definitivo)
         ID_Solicitud: event.cliente['codigoCliente'], //Generar aleatorio (22),
         ID_Motivo_Solicitud: "ZB18", //Dato fijo para altas de cliente
-        ZTEXT: "", //Se solicita en la mascara de clientes
-        ZFECHA: moment(date.getTime()).tz("America/Mexico_City").format("YYYY-MM-DD"), //Extraer con la información de fechaAlta (Se coloca por .NET)
-        ZHORA: moment(date.getTime()).tz("America/Mexico_City").format("HH:mm:SS"), //Extraer con la información de fechaAlta (Se coloca por .NET)
-        fechaSolicitud: moment(date.getTime()).tz("America/Mexico_City").format("YYYY-MM-DD"), //event.cliente['fechaAlta'], //Extraer fecha de lambda
+        ZTEXT: null, //Se solicita en la mascara de clientes
+        ZFECHA: null, //Extraer con la información de fechaAlta (Se coloca por .NET)
+        ZHORA: null, //Extraer con la información de fechaAlta (Se coloca por .NET)
+        fechaSolicitud: moment(date.getTime()).tz("America/Mexico_City").format("YYYY-MM-DD HH:mm:SS"), //event.cliente['fechaAlta'], //Extraer fecha de lambda
         //Front Appian
         //idCliente: event['idCliente'], //Generado incrementalmente desde Appian, temporal hasta que se tenga el definitivo de SAP
         //codigoCliente: event['codigoCliente'], //Usuario final que genera el transaccional
@@ -134,10 +134,10 @@ if(productos){
         KUNNR: "CD00000000", //Dato fijo para clientes nuevos (Número de cliente definitivo)
         ID_Solicitud: event['codigoCliente'], //Generar aleatorio (22),
         ID_Motivo_Solicitud: "ZB18", //Dato fijo para altas de cliente
-        ZTEXT: "", //Se solicita en la mascara de clientes
-        ZFECHA: moment(date.getTime()).tz("America/Mexico_City").format("YYYY-MM-DD"), //Extraer con la información de fechaAlta (Se coloca por .NET)
-        ZHORA: moment(date.getTime()).tz("America/Mexico_City").format("HH:mm:SS"), //Extraer con la información de fechaAlta (Se coloca por .NET)
-        fechaSolicitud: moment(date.getTime()).tz("America/Mexico_City").format("YYYY-MM-DD"), //event['fechaAlta'], //Extraer fecha de lambda
+        ZTEXT: null, //Se solicita en la mascara de clientes
+        ZFECHA: null, //Extraer con la información de fechaAlta (Se coloca por .NET)
+        ZHORA: null, //Extraer con la información de fechaAlta (Se coloca por .NET)
+        fechaSolicitud: moment(date.getTime()).tz("America/Mexico_City").format("YYYY-MM-DD HH:mm:SS"), //event['fechaAlta'], //Extraer fecha de lambda
         //Front Appian
         //idCliente: event['idCliente'], //Generado incrementalmente desde Appian, temporal hasta que se tenga el definitivo de SAP
         //codigoCliente: event['codigoCliente'], //Usuario final que genera el transaccional
@@ -219,6 +219,7 @@ if(productos){
 
     
     let resultado;
+    let dato;
     // pedidos.forEach(function (element) {
     //     console.log(element);
     // });
@@ -474,7 +475,7 @@ switch(cuestionarios.ISSCOMcuestionario){
     case '6': //CUESTIONARIO No. 6 - OTRAS COMPRAS DE PRODUCTOS Y SERVICIOS EN GENERAL
         switch(cuestionarios.ISSCOMp1){
             case 'A':
-                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - ELECTRODOMESTICOS
+                cliente.ISSCOM = 3401; //VENTA PRODUCTOS EN GENERAL - ELECTRODOMESTICOS
             break;
             case 'B':
                 if(cuestionarios.ISSCOMp2 == "A"){
@@ -484,25 +485,25 @@ switch(cuestionarios.ISSCOMcuestionario){
                 }
             break;
             case 'C':
-                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - JOYERIA
+                cliente.ISSCOM = 3401; //VENTA PRODUCTOS EN GENERAL - JOYERIA
             break;
             case 'D':
-                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - LOTERIA Y PRONOSTICOS
+                cliente.ISSCOM = 3401; //VENTA PRODUCTOS EN GENERAL - LOTERIA Y PRONOSTICOS
             break;
             case 'E':
                 cliente.ISSCOM = 4402; //PUESTO DE REVISTAS/PERIÓDICOS
             break;
             case 'F':
-                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - MATERIAS PRIMAS
+                cliente.ISSCOM = 3401; //VENTA PRODUCTOS EN GENERAL - MATERIAS PRIMAS
             break;
             case 'G':
-                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - MEERCERÍ Y JUGUETES
+                cliente.ISSCOM = 3401; //VENTA PRODUCTOS EN GENERAL - MEERCERÍ Y JUGUETES
             break;
             case 'H':
-                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - MUEBLERÍA
+                cliente.ISSCOM = 3401; //VENTA PRODUCTOS EN GENERAL - MUEBLERÍA
             break;
             case 'I':
-                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - TIENDA DE REGALOS
+                cliente.ISSCOM = 3401; //VENTA PRODUCTOS EN GENERAL - TIENDA DE REGALOS
             break;
             case 'J':
                 cliente.ISSCOM = 2307; //PAPELERÍA                               
@@ -514,22 +515,22 @@ switch(cuestionarios.ISSCOMcuestionario){
                 cliente.ISSCOM = 3807; //VIDEO CLUB
             break;
             case 'M':
-                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - ZAPATERÍA
+                cliente.ISSCOM = 3401; //VENTA PRODUCTOS EN GENERAL - ZAPATERÍA
             break;
             case 'N':
-                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - FLORERIA
+                cliente.ISSCOM = 3401; //VENTA PRODUCTOS EN GENERAL - FLORERIA
             break;
             case 'O':
-                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - FERRETERIA/ TLAPALERIA/ PINTURAS
+                cliente.ISSCOM = 3401; //VENTA PRODUCTOS EN GENERAL - FERRETERIA/ TLAPALERIA/ PINTURAS
             break;
             case 'P':
-                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - EQUIPO DE COMPUTO
+                cliente.ISSCOM = 3401; //VENTA PRODUCTOS EN GENERAL - EQUIPO DE COMPUTO
             break;
             case 'Q':
-                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - GAS
+                cliente.ISSCOM = 3401; //VENTA PRODUCTOS EN GENERAL - GAS
             break;
             case 'R':
-                cliente.ISSCOM = 3405; //VENTA PRODUCTOS EN GENERAL - OTROS PRODUCTOS
+                cliente.ISSCOM = 3401; //VENTA PRODUCTOS EN GENERAL - OTROS PRODUCTOS
             break;
         }
         switch(cuestionarios.ISSCOMp3){
@@ -680,7 +681,9 @@ switch(cuestionarios.ISSCOMcuestionario){
     //////////////////////////////////
 
 //////////////////////////////////////////////////////////////////
-
+if(cliente.ZNAME4 == ""){
+    cliente.ZNAME4 = cliente.ZNAME1;
+}
 //////////////////////////SQL CONNECTION//////////////////////////
 
     var connection = mysql.createConnection({
@@ -699,12 +702,18 @@ switch(cuestionarios.ISSCOMcuestionario){
 
     console.log('Conexión a la base de datos');
 
-    var catalogoCP = 'SELECT * FROM catalogoCP WHERE ID_CODIGOP=' + cliente.ZCPOSTAL
-    connection.query(catalogoCP, function (err, result) {
+    var catalogoRutas = "SELECT * FROM catalogoRutas WHERE ROUTE = '" + cliente.ROUTE + "' AND ZROUTE = '" + cliente.RUTA_REPARTO + "'";
+    // connection.query(catalogoRutas, function (err, resultRoute){
+    //     if (err) throw err;
+    //     let dato = resultRoute[0];
+        
+    // var catalogoCP = "SELECT * FROM catalogoCP WHERE ID_CODIGOP = '" + cliente.ZCPOSTAL + "' AND BZIRK = '" + cliente.BZIRK + "'";
+    connection.query(catalogoRutas, function (err, result) {
     if (err) throw err;
     resultado = result[0];
     cliente.KDGRP = resultado.KDGRP
-    cliente.BZIRK = resultado.BZIRK
+    cliente.BZIRK = resultado.BZIRK;
+    // cliente.BZIRK = resultado.BZIRK
     // cliente.ZESTPROV = resultado.ID_ESTADO
     console.log("KDGRP", resultado.KDGRP);
     console.log("BZIRK", resultado.BZIRK);

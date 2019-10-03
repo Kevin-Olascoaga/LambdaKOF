@@ -2,6 +2,7 @@ var AWS = require('aws-sdk');
 var mysql = require('mysql');
 // var moment = require("moment-timezone");
 const csv = require('csvtojson');
+var moment = require("moment-timezone");
 
 exports.handler = function (event, context, callback) {
     //Conexión al S3 - posterior al sftp/////////////
@@ -23,7 +24,11 @@ exports.handler = function (event, context, callback) {
         // get csv file and create stream
         const stream = s3.getObject(getParams).createReadStream();
         // convert csv file (stream) to JSON format data
-        const json = await csv().fromStream(stream);
+        // let json = {
+        //     idOficinaMovil: "",
+        //     EVENTOGUID: "",
+        // };
+        let json = await csv({noheader:true}).fromStream(stream);
         console.log(json);
         connection.connect(function (err) {
             if (err) {
@@ -31,13 +36,24 @@ exports.handler = function (event, context, callback) {
                 return;
             }
             console.log('Conexión a la base de datos');
+            let mañana = new Date();
+            mañana.setDate(mañana.getDate() + 1);
+            mañana = moment(mañana.getTime()).tz("America/Mexico_City").format("YYYY-MM-DD");
             for (let i = 0; i < json.length; i++) {
                 let elemento = json[i];
                 // console.log(json[i]);
-                if (elemento.KUNNR != "CD00000000") { //Se actualiza en base de datos
+                // field1: 'idOficinaMovil',
+                // field2: 'EVENTOGUID',
+                // field3: 'KUNNR',
+                // field4: 'ID_Solicitud',
+                // field5: 'ZFECHA',
+                // field6: 'ZHORA',
+                // field7: 'ESTATUS',
+                // field8: 'MENSAJE',
+                // if (elemento.field3 != "CD00000000") { //Se actualiza en base de datos
                     console.log("Elemento se actualiza");
-                    let sqlPedidos = "UPDATE pedidos SET CLIENTE = '" + elemento.KUNNR + "', `RESPONSABLE DE PAGO` = '" + elemento.KUNNR + "', `DESTINATARIO DE MERCANCIA` = '" + elemento.KUNNR + "' WHERE idOficinaMovil = '" + elemento.idOficinaMovil + "'";
-                    let sqlClientes = "UPDATE prueba SET KUNNR = '" + elemento.KUNNR + "' WHERE idOficinaMovil = '" + elemento.idOficinaMovil + "'";
+                    let sqlPedidos = "UPDATE pedidos SET CLIENTE = '" + elemento.field3 + "', `RESPONSABLE DE PAGO` = '" + elemento.field3 + "', `DESTINATARIO DE MERCANCIA` = '" + elemento.field3 + "', `FECHA ENTREGA` = '" + mañana + "' WHERE idOficinaMovil = '" + elemento.field1 + "'";
+                    let sqlClientes = "UPDATE prueba SET KUNNR = '" + elemento.field3 + "', ZFECHA = '" + elemento.field5 + "', ZHORA = '" + elemento.field6 + "', estatus = '" + elemento.field7 + "' WHERE idOficinaMovil = '" + elemento.field1 + "'";
                     connection.query(sqlClientes, function (err, result) {
                         if (err) throw err;
                         console.log("Cliente actualizado: ");
@@ -47,9 +63,9 @@ exports.handler = function (event, context, callback) {
                         if (err) throw err;
                         console.log("Pedidos actualizados: ");
                     });
-                } else { //Elemento no se actualiza
-                    console.log("Elemento no se actualiza");
-                }
+                // } else { //Elemento no se actualiza
+                //     console.log("Elemento no se actualiza");
+                // }
             };
             connection.end();
             // callback(null, { "mensaje": "" });

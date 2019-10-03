@@ -1,0 +1,1248 @@
+load(
+    local!terminosCondiciones,
+    local!regimenFiscalCliente: rule!KOF_QE_CocacolaFemsa_Cat_RegimenFiscal(
+      regimenFiscal: null,
+      pagingInfo: null
+    ).data,
+    /*Datos Calculados RFC*/
+    local!datosRFCPorCodigoPostal,
+    local!mostrarDesplegableRFCEstado,
+    local!mostrarDesplegableRFCMunicipio,
+    local!mostrarDesplegableRFCColonia,
+    local!valoresRFCEstado,
+    local!valoresRFCEstadoMin,
+    local!valoresRFCMunicipio,
+    local!valoresRFCColonia,
+    /*Datos Calculados Cliente*/
+    local!datosClientePorCodigoPostal:rule!KOF_QE_CocacolaFemsa_Cat_CodigoPostal(
+      estado: null,
+      codigoPostal: tointeger(trim(ri!cliente.codigoPostal)),
+      idEstado:null,
+      pagingInfo: null
+    ),
+    local!mostrarDesplegableClienteEstado,
+    local!mostrarDesplegableClienteMunicipio,
+    local!mostrarDesplegableClienteColonia,
+    local!valoresClienteEstado
+    /*:*/
+    /*if(local!datosClientePorCodigoPostal.totalCount>0,union(*/
+      /*local!datosClientePorCodigoPostal.data.estado,*/
+      /*local!datosClientePorCodigoPostal.data.estado*/
+    /*),{})*/
+    ,
+    local!valoresClienteEstadoMin
+    /*:*/
+    /*if(local!datosClientePorCodigoPostal.totalCount>0,union(*/
+      /*local!datosClientePorCodigoPostal.data.id_estado,*/
+      /*local!datosClientePorCodigoPostal.data.id_estado*/
+    /*),{})*/
+    ,
+    local!valoresClienteMunicipio
+    /*:*/
+    /*if(local!datosClientePorCodigoPostal.totalCount>0,union(*/
+      /*local!datosClientePorCodigoPostal.data.municipio,*/
+      /*local!datosClientePorCodigoPostal.data.municipio*/
+    /*),{})*/
+    ,
+    local!valoresClienteColonia
+    /*:*/
+    /*if(local!datosClientePorCodigoPostal.totalCount>0,union(*/
+      /*local!datosClientePorCodigoPostal.data.colonia,*/
+      /*local!datosClientePorCodigoPostal.data.colonia*/
+    /*),{})*/
+    ,
+    /*Longutud y latitud al cambiar la calle o el numero*/
+    local!coordenadas,
+    
+    local!datosCFDI: rule!KOF_QE_CocacolaFemsa_Cat_USOCFDI(zTipoNec:null, pagingInfo:null).data,
+    local!rutasDeReparto:rule!KOF_QE_CocacolaFemsa_Cat_getRutas(ruta:
+    index(index(rule!KOF_QE_CocacolaFemsa_getComerciales(idComercial:null, emailUsuarioAppian:user(loggedInUser(),"email"), cliente:null, pagingInfo:null).data,"rutaDeReparto",{}),1,{})
+    , pagingInfo:null).data,
+    local!diasEntrega:rule!KOF_QE_CocacolaFemsa_Cat_Metodo(metodo:null, pagingInfo:null).data,
+    /*local!datosUbicacion:if(not(isnull(index(ri!ubicacion,"location",null))),split(rule!GetGeocoding(*/
+      /*latitude:ri!ubicacion.location.latitude,*/
+      /*longitude:ri!ubicacion.location.longitude*/
+    /*).result.geocode.formattedAddress[1],","),null),*/
+    /*local!datosUbicacionCP:if(not(isnull(local!datosUbicacion)),index(split(index(local!datosUbicacion,3,null)," "),1,null),null),*/
+    {
+      /*a!textField(value:union(local!datosClientePorCodigoPostal.data.estado,local!datosClientePorCodigoPostal.data.estado)),*/
+      a!imageField(
+        images: a!documentImage(
+          document: cons!KOF_COCACOLAFEMSA_Logo
+        ),
+        align: "CENTER"
+      ),
+      a!sideBySideLayout(
+        items: {
+          a!sideBySideItem(
+            item: a!imageField(
+              images: a!documentImage(
+                document:cons!KOF_CocacolaFemsa_Atras,
+                link: a!submitLink(
+                  confirmHeader: "Cancelar Alta de Cliente",
+                  confirmMessage: "¿Quieres cancelar el alta del Cliente?",
+                  value: true,
+                  saveInto: ri!cancelar
+                ),
+                linkStyle: "STANDALONE",
+                color: cons!KOF_Color_Rojo_CocaCola,
+                size: "LARGE"
+              ),
+              size:"TINY"),width: "MINIMIZE"
+            ),
+          a!sideBySideItem(
+            item: a!richTextDisplayField(
+              value: {
+                a!richTextItem(
+                  text: "Alta de Clientes",
+                  color: cons!KOF_Color_Rojo_CocaCola,
+                  size: "LARGE",
+                  style: "STRONG"
+                )
+              },
+              align: "CENTER"
+            ),
+            width: "AUTO"
+          ),
+          a!sideBySideItem(
+            item: a!richTextDisplayField(
+              value: {
+                a!richTextItem(
+                  text: {
+                    char(
+                      9
+                    )
+                  }
+                )
+              }
+            ),
+            width: "MINIMIZE"
+          )
+        }
+      ),
+      a!richTextDisplayField(
+        value: {
+          a!richTextItem(
+            text: {
+              "Formulario único de prospección"
+            },
+            color: cons!KOF_Color_Rojo_CocaCola,
+            /*style:"STRONG",*/
+            size: "MEDIUM"
+          )
+        },
+        align: "CENTER"
+      ),
+      /*a!integerField(value:len(ri!cliente.nombreContacto)),*/
+      a!textField(
+        label: "Nombre",
+        labelPosition: "ABOVE",
+        value: ri!cliente.nombreContacto,
+        saveInto: ri!cliente.nombreContacto,
+        refreshAfter: "UNFOCUS",
+        required: true,
+        requiredMessage: " ",
+        validations: {if(len(ri!cliente.nombreContacto)>35,"El nombre del cliente es demasiado largo. Quite "&tostring(len(ri!cliente.nombreContacto)-35)& " letras.",{})},
+        validationGroup: "validacion"
+      ),
+      /*a!integerField(value:len(ri!cliente.telefono)),*/
+      a!textField(
+        label: "Apellidos",
+        labelPosition: "ABOVE",
+        value: ri!cliente.apellidoContacto,
+        saveInto: ri!cliente.apellidoContacto,
+        refreshAfter: "UNFOCUS",
+        required: true,
+        requiredMessage: " ",
+        validations: {if(len(ri!cliente.apellidoContacto)>35,"Los apellidos del cliente son demasiado largo. Quite "&tostring(len(ri!cliente.apellidoContacto)-35)& " letras.",{})},
+        validationGroup: "validacion"
+      ),
+      a!textField(
+        label: "Nombre de la tienda",
+        labelPosition: "ABOVE",
+        value: ri!cliente.nombreTienda,
+        saveInto: ri!cliente.nombreTienda,
+        refreshAfter: "UNFOCUS",
+        required: true,
+        requiredMessage: " ",
+        validations: {if(len(ri!cliente.nombreTienda)>35,"El nombre de la tienda es demasiado largo. Quite "&tostring(len(ri!cliente.nombreTienda)-35)& " letras.",{})},
+        validationGroup: "validacion"
+      ),
+      a!textField(
+        label: "Teléfono",
+        labelPosition: "ABOVE",
+        value: ri!cliente.telefono,
+        saveInto: ri!cliente.telefono,
+        refreshAfter: "UNFOCUS",
+        required: true,
+        requiredMessage: " ",
+        validations: {if(len(ri!cliente.telefono)>10,"El número de teléfono es demasiado largo. Quite "&tostring(len(ri!cliente.telefono)-10)& " números.",if(like(ri!cliente.telefono,"[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]"),{},"El formato de número de teléfono es incorrecto"))},
+        validationGroup: "validacion"
+      ),
+      a!textField(
+        label: "Celular",
+        labelPosition: "ABOVE",
+        value: ri!cliente.celular,
+        saveInto: ri!cliente.celular,
+        refreshAfter: "UNFOCUS",
+        required: true,
+        requiredMessage: " ",
+        validations: {if(len(ri!cliente.celular)>10,"El número del celular es demasiado largo. Quite "&tostring(len(ri!cliente.celular)-10)& " números.",if(like(ri!cliente.celular,"[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]"),{},"El formato de número del celular es incorrecto"))},
+        validationGroup: "validacion"
+      ),
+  
+      a!textField(label:"Correo",value:toemailaddress(ri!cliente.correo),saveInto: ri!cliente.correo,validations: if(validateemailaddress(ri!cliente.correo),{},"El email no es válido")  ),
+      a!richTextDisplayField(
+        value: {
+          a!richTextItem(
+            text: {
+              "Información geográfica"
+            },
+            color: cons!KOF_Color_Rojo_CocaCola,
+            size: "MEDIUM",
+            style: "STRONG"
+          )
+        },
+        align: "CENTER"
+      ),
+      /*a!sideBySideLayout(*/
+        /*items: {*/
+          /*a!sideBySideItem(*/
+            /*item: a!textField(*/
+              /*label: "Ubicación",*/
+              /*labelPosition: "ABOVE",*/
+              /*value: ri!cliente.latitud & " " & ri!cliente.longitud,*/
+              /*saveInto: ri!cliente.ubicacion,*/
+              /*refreshAfter: "UNFOCUS",*/
+              /*readOnly: true(),*/
+              /*validations: {}*/
+            /*)*/
+          /*),*/
+          /*a!sideBySideItem(*/
+            /*item: a!richTextDisplayField(*/
+              /*value: {*/
+                /*a!richTextItem(*/
+                  /*text: {*/
+                    /*char(*/
+                      /*10*/
+                    /*)*/
+                  /*}*/
+                /*),*/
+                /*a!richTextIcon(*/
+                  /*icon: "map-marker",*/
+                  /*color: cons!KOF_Color_Rojo_CocaCola,*/
+                  /*size: "MEDIUM_PLUS"*/
+                /*),*/
+                /*a!richTextItem(*/
+                  /*text: {*/
+                    /*char(*/
+                      /*9*/
+                    /*)*/
+                  /*}*/
+                /*)*/
+              /*}*/
+            /*),*/
+            /*width: "MINIMIZE"*/
+          /*)*/
+        /*}*/
+      /*),*/
+      if(not(isnull(index(ri!ubicacion,"location",null))),
+      {
+        a!textField(
+          label: "Ubicación",readOnly: true()),
+        fn!googleMapsDisplayField(
+        validations: {},
+        height: "SHORT",
+        googleMapsApiKey: cons!MapsUIKey,
+        mapMarkers: {
+          {
+            /*"name": ri!address,*/
+            /*"content": ri!address,*/
+            "lat": ri!ubicacion.location.latitude,
+            "lng": ri!ubicacion.location.longitude
+          }
+        },
+        zoomLevel: 17,
+        mapCenter: {
+          lat: ri!ubicacion.location.latitude,
+          lng: ri!ubicacion.location.longitude
+        },
+        enableZoom: true(),
+        enablePanning: true(),
+        enableStreetView: false(),
+        onMarkerSelected: null
+      )},{}),
+      /*a!textField(label:"Input Localizacion",value:ri!ubicacion),*/
+      /*a!textField(label:"Calculo Localizacion",value:local!datosUbicacion),*/
+      /*if(not(isnull(local!datosUbicacion)),*/
+      /*a!forEach(split(local!datosUbicacion,","),*/
+      /*a!textField(label:"Calculo Localizacion " &tostring(fv!index)&" ",value:fv!item)*/
+      /*),{}),*/
+      
+      a!textField(label:"Coordenada Longitud",value: ri!cliente.longitud,readOnly: true(),saveInto: ri!cliente.longitud),
+      a!textField(label:"Coordenada Latitud",value:ri!cliente.latitud,readOnly: true(),saveInto: ri!cliente.latitud),
+      a!cardLayout(
+        contents: {
+          /*a!textField(label:"Dirección",readOnly: true()),*/
+          /*a!textField(label:"Código Postal",value: if(isnull(local!datosUbicacionCP),ri!cliente.codigoPostal,local!datosUbicacionCP),saveInto: ri!cliente.codigoPostal),*/
+          /*a!textField(value:local!datosClientePorCodigoPostal),*/
+          a!textField(label: "Código Postal",
+          value: tointeger(trim(ri!cliente.codigoPostal)),
+          saveInto: {
+            ri!cliente.codigoPostal,
+            a!save(local!mostrarDesplegableClienteEstado,null),
+            a!save(local!mostrarDesplegableClienteMunicipio,null),
+            a!save(local!mostrarDesplegableClienteColonia,null),
+            a!save(
+              ri!cliente.estado,
+              null
+            ),
+            a!save(
+              ri!cliente.municipio,
+              null
+            ),
+            a!save(
+              ri!cliente.colonia,
+              null
+            ),
+            if(
+              not(
+                isnull(
+                  ri!cliente.codigoPostal
+                )
+              ),
+              {
+                a!save(
+                  ri!cliente.estado,
+                  null
+                ),
+                a!save(
+                  ri!cliente.municipio,
+                  null
+                ),
+                a!save(
+                  ri!cliente.colonia,
+                  null
+                ),
+                a!save(
+                  local!datosClientePorCodigoPostal,
+                  rule!KOF_QE_CocacolaFemsa_Cat_CodigoPostal(
+                    estado: null,
+                    codigoPostal: tointeger(trim(ri!cliente.codigoPostal)),
+                    idEstado:null,
+                    pagingInfo: null
+                  )
+                ),
+                if(local!datosClientePorCodigoPostal.totalCount>0,
+                {
+                  /*a!save(local!datosClientePorCodigoPostal.data,local!datosClientePorCodigoPostal.data.data),*/
+                  a!save(
+                    local!valoresClienteEstadoMin,
+                    union(
+                      local!datosClientePorCodigoPostal.data.id_estado,
+                      local!datosClientePorCodigoPostal.data.id_estado
+                    )
+                  ),
+                  a!save(
+                    local!valoresClienteEstado,
+                    union(
+                      local!datosClientePorCodigoPostal.data.estado,
+                      local!datosClientePorCodigoPostal.data.estado
+                    )
+                  ),
+                  a!save(
+                    local!valoresClienteMunicipio,
+                    union(
+                      local!datosClientePorCodigoPostal.data.municipio,
+                      local!datosClientePorCodigoPostal.data.municipio
+                    )
+                  ),
+                  a!save(
+                    local!valoresClienteColonia,
+                    union(
+                      local!datosClientePorCodigoPostal.data.colonia,
+                      local!datosClientePorCodigoPostal.data.colonia
+                    )
+                  )},{}),
+                  if(or(isnull(local!valoresClienteEstado),length(local!valoresClienteEstado)=1),
+                  a!save(ri!cliente.estado,local!valoresClienteEstadoMin),{}),
+                  if(or(isnull(local!valoresClienteMunicipio),length(local!valoresClienteMunicipio)=1),
+                  a!save(ri!cliente.municipio,local!valoresClienteMunicipio),{}),
+                  if(or(isnull(local!valoresClienteColonia),length(local!valoresClienteColonia)=1),
+                  a!save(ri!cliente.colonia,local!valoresClienteColonia),{})
+              },
+              {
+  
+              }
+            )
+          },
+          validations: {if(len(tostring(tointeger(trim(ri!cliente.codigoPostal))))<4,
+          "Introduzca al menos 4 números",
+          if(or(isnull(local!datosClientePorCodigoPostal.data),local!datosClientePorCodigoPostal.totalCount=0),"El Código Postal no Existe",{}))}
+          ),
+                  
+          /*a!textField(label:"Municipio Calc",value: index(local!datosUbicacion,4,ri!cliente.municipio),saveInto: ri!cliente.municipio),*/
+          /*a!textField(label:"Estado  Calc",value: isnull(local!valoresClienteEstado)),*/
+          /*a!textField(value:local!datosClientePorCodigoPostal.data),*/
+          if(
+            and(or(isnull(local!valoresClienteEstado),length(local!valoresClienteEstado)=1),isnull(local!mostrarDesplegableClienteEstado)),
+            a!textField(
+              label: "Estado",
+              value: 
+              index(rule!KOF_QE_CocacolaFemsa_Cat_CodigoPostal(
+                estado: null,
+                codigoPostal: null,
+                idEstado:if(isnull(ri!cliente.estado),"www",ri!cliente.estado),
+                pagingInfo: null
+              ).data,"estado",ri!cliente.estado),
+              /*saveInto: ri!cliente.estado,*/
+              readOnly: true()
+            ),
+            a!dropdownField(
+              label: "Estado",
+              placeholderLabel: "--Seleccionar--",
+              choiceLabels: split(
+                local!valoresClienteEstado,
+                ";"
+              ),
+              choiceValues: split(
+                local!valoresClienteEstadoMin,
+                ";"
+              ),
+              value: ri!cliente.estado,
+              saveInto: {ri!cliente.estado,
+              a!save(local!mostrarDesplegableClienteEstado,true())
+              }
+            )
+          ),
+          if(
+            and(or(isnull(local!valoresClienteMunicipio),length(local!valoresClienteMunicipio)=1),isnull(local!mostrarDesplegableClienteMunicipio)),
+            a!textField(
+              label: "Municipio",
+              labelPosition: "ABOVE",
+              value: ri!cliente.municipio,
+              /*saveInto: ri!cliente.municipio,*/
+              refreshAfter: "UNFOCUS",
+              required: true,
+              requiredMessage: " ",
+              readOnly: true(),
+              validations: {},
+              validationGroup: "validacion"
+            ),
+            a!dropdownField(
+              label: "Municipio",
+              placeholderLabel: "--Seleccionar--",
+              choiceLabels: split(
+                local!valoresClienteMunicipio,
+                ";"
+              ),
+              choiceValues: split(
+                local!valoresClienteMunicipio,
+                ";"
+              ),
+              value: if(
+                find(
+                  ";",
+                  ri!cliente.municipio
+                ) = 0,
+                ri!cliente.municipio,
+                null
+              ),
+              saveInto: {ri!cliente.municipio,
+              a!save(local!mostrarDesplegableClienteMunicipio,true())},
+            )),
+            /*a!richTextDisplayField(label:"Valores Colonia",value:length(local!valoresRFCColonia)),*/
+            if(
+              and(or(isnull(local!valoresClienteColonia),length(local!valoresClienteColonia)=1),isnull(local!mostrarDesplegableClienteColonia)),
+              a!textField(
+                label: "Colonia",
+                labelPosition: "ABOVE",
+                value:ri!cliente.colonia,
+                /*saveInto: ri!cliente.colonia,*/
+                refreshAfter: "UNFOCUS",
+                required: true,
+                requiredMessage: " ",
+                readOnly: true(),
+                validations: {},
+                validationGroup: "validacion"
+              ),
+              a!dropdownField(
+                label: "Colonia",
+                placeholderLabel: "--Seleccionar--",
+                choiceLabels: 
+                local!valoresClienteColonia,
+                choiceValues: 
+                local!valoresClienteColonia,
+                value: 
+                ri!cliente.colonia,
+                saveInto: {ri!cliente.colonia,
+                a!save(local!mostrarDesplegableClienteColonia,true())}
+              )),
+          
+          a!textField(label:"Calle",value:ri!cliente.calle,saveInto: {
+            ri!cliente.calle,
+            if(or(isnull(ri!cliente.calle),isnull(ri!cliente.numeroExt)),{},
+            a!save(local!coordenadas ,rule!GetGeocoding( addressOrPlace:(ri!cliente.calle&" "&ri!cliente.numeroExt)).result.geocode.geometry)
+          ),
+          if(or(isnull(ri!cliente.calle),isnull(ri!cliente.numeroExt),isnull(local!coordenadas)),{},
+          {a!save(ri!cliente.latitud ,local!coordenadas.lat),
+          a!save(ri!cliente.longitud ,local!coordenadas.lng)}
+          )
+          }),
+          a!textField(label:"Numero Exterior",value:ri!cliente.numeroExt,saveInto: {ri!cliente.numeroExt
+          ,
+          if(or(isnull(ri!cliente.calle),isnull(ri!cliente.numeroExt)),{},
+          a!save(local!coordenadas ,rule!GetGeocoding( addressOrPlace:(ri!cliente.calle&" "&ri!cliente.numeroExt)).result.geocode.geometry)
+          ),
+          if(or(isnull(ri!cliente.calle),isnull(ri!cliente.numeroExt),isnull(local!coordenadas)),{},
+          {a!save({ri!cliente.latitud, ri!ubicacion.location.latitude} ,local!coordenadas.lat),
+          a!save({ri!cliente.longitud, ri!ubicacion.location.longitude} ,local!coordenadas.lng)}
+          )
+          }
+          ),
+          a!textField(label:"Numero Interior",value: ri!cliente.numeroInt,saveInto: ri!cliente.numeroInt),
+          a!checkboxField(
+            label: "Enrejado",
+            labelPosition: "ABOVE",
+            choiceLabels: {""},
+            choiceValues: {true()},
+            value: if(and(not(isnull(ri!cliente.enrejado)),ri!cliente.enrejado=false()),null,ri!cliente.enrejado),
+            saveInto: a!save(ri!cliente.enrejado,if(isnull(save!value),false(),save!value)),
+  
+            choiceLayout: "COMPACT",
+            validations: {}
+          )
+          
+        },
+        marginBelow:"STANDARD"
+      ),
+      a!richTextDisplayField(
+        value: {
+          a!richTextItem(
+            text: {
+              "Visitas"
+            },
+            color: cons!KOF_Color_Rojo_CocaCola,
+            size: "MEDIUM",
+            style: "STRONG"
+          )
+        },
+        align: "CENTER"
+      ),
+      a!cardLayout(
+        contents: {
+          a!dropdownField(label:"Ruta de Reparto",
+          placeholderLabel: "--Seleccionar--",
+          choiceLabels: index(local!rutasDeReparto,"zroute",null),
+          choiceValues: index(local!rutasDeReparto,"zroute",null),
+          value: ri!cliente.rutaDeReparto,
+          saveInto: ri!cliente.rutaDeReparto),
+          
+          a!dropdownField(label:"Modalidad de Entrega",
+          placeholderLabel: "--Seleccionar--",
+          disabled: true(),
+          choiceLabels: index(local!diasEntrega,"metodo",null),
+          choiceValues: index(local!diasEntrega,"idmetodo",null),
+          value: ri!cliente.diaEntrega,
+          saveInto: ri!cliente.diaEntrega),
+          
+          
+          
+          
+          a!checkboxField(
+            label:"Días de Visitas Preventa",
+            labelPosition: "ABOVE",
+            choiceLabels: {"Lunes"},
+            choiceValues: {true()},
+            value: if(and(not(isnull(ri!cliente.lunes)),ri!cliente.lunes=false()),null,ri!cliente.lunes),
+            saveInto: a!save(ri!cliente.lunes,if(isnull(save!value),false(),save!value)),
+            
+            choiceLayout: "STACKED",
+            validations: {}
+          ),
+          a!checkboxField(
+            labelPosition: "ABOVE",
+            choiceLabels: {"Martes"},
+            choiceValues: {true()},
+            value: if(and(not(isnull(ri!cliente.martes)),ri!cliente.martes=false()),null,ri!cliente.martes),
+            saveInto: a!save(ri!cliente.martes,if(isnull(save!value),false(),save!value)),
+  
+            choiceLayout: "STACKED",
+            validations: {}
+          ),
+          a!checkboxField(
+            labelPosition: "ABOVE",
+            choiceLabels: {"Miercoles"},
+            choiceValues: {true()},
+            value: if(and(not(isnull(ri!cliente.miercoles)),ri!cliente.miercoles=false()),null,ri!cliente.miercoles),
+            saveInto: a!save(ri!cliente.miercoles,if(isnull(save!value),false(),save!value)),
+  
+            choiceLayout: "STACKED",
+            validations: {}
+          ),
+          a!checkboxField(
+            labelPosition: "ABOVE",
+            choiceLabels: {"Jueves"},
+            choiceValues: {true()},
+            value: if(and(not(isnull(ri!cliente.jueves)),ri!cliente.jueves=false()),null,ri!cliente.jueves),
+            saveInto: a!save(ri!cliente.jueves,if(isnull(save!value),false(),save!value)),
+  
+            choiceLayout: "STACKED",
+            validations: {}
+          ),
+          a!checkboxField(
+            labelPosition: "ABOVE",
+            choiceLabels: {"Viernes"},
+            choiceValues: {true()},
+            value: if(and(not(isnull(ri!cliente.viernes)),ri!cliente.viernes=false()),null,ri!cliente.viernes),
+            saveInto: a!save(ri!cliente.viernes,if(isnull(save!value),false(),save!value)),
+  
+            choiceLayout: "STACKED",
+            validations: {}
+          ),
+          a!checkboxField(
+            labelPosition: "ABOVE",
+            choiceLabels: {"Sabado"},
+            choiceValues: {true()},
+            value: if(and(not(isnull(ri!cliente.sabado)),ri!cliente.sabado=false()),null,ri!cliente.sabado),
+            saveInto: a!save(ri!cliente.sabado,if(isnull(save!value),false(),save!value)),
+  
+            choiceLayout: "STACKED",
+            validations: {}
+          )
+          
+        },
+        marginBelow:"STANDARD"
+      ),
+      a!checkboxField(label:"Factura",choiceLabels: "",choiceValues: {true()},value: ri!cliente.factura,saveInto: {ri!cliente.factura,
+      if(isnull(ri!cliente.factura),{
+        a!save(ri!cliente.RFCregimenFiscal,null),
+        a!save(ri!cliente.RFCnombre,null),
+        a!save(ri!cliente.RFCapellidos,null),
+        a!save(ri!cliente.RFC,null),
+        a!save(ri!cliente.RFCcodigoPostal,null),
+        a!save(ri!cliente.RFCestado,null),
+        a!save(ri!cliente.RFCmunicipio,null),
+        a!save(ri!cliente.RFCcolonia,null),
+        a!save(ri!cliente.RFCcalle,null),
+        a!save(ri!cliente.RFCnumeroExt,null),
+        a!save(ri!cliente.RFCnumeroInt,null)
+      },{})}),
+      a!checkboxField(label:"Remisión",choiceLabels: "",choiceValues: {true()},value: ri!cliente.remision,saveInto: {ri!cliente.remision}),
+      a!checkboxField(label:"No Impresión de Factura",choiceLabels: "",choiceValues: {true()},value: ri!cliente.noImpresion,saveInto: {ri!cliente.noImpresion}),
+      if(and(not(isnull(ri!cliente.factura)),ri!cliente.factura=true()),
+      a!cardLayout(
+        contents: {
+          a!richTextDisplayField(
+            value: {
+              a!richTextItem(
+                text: {
+                  "Régimen Fiscal"
+                },
+                color: cons!KOF_Color_Rojo_CocaCola,
+                size: "MEDIUM",
+                style: "STRONG"
+              )
+            },
+            align: "CENTER"
+          ),
+          a!dropdownField(
+            label: "Tipo de Persona",
+            placeholderLabel: "--Seleccionar--",
+            choiceLabels: local!regimenFiscalCliente.vtext,
+            choiceValues: local!regimenFiscalCliente.katr3,
+            value: ri!cliente.RFCregimenFiscal,
+            saveInto: ri!cliente.RFCregimenFiscal
+          ),
+          a!textField(
+            label: "Razón Social",
+            labelPosition: "ABOVE",
+            value: /*if(*/
+            /*isnull(*/
+            ri!cliente.razonSocial/*),*/
+            /*ri!cliente.nombreContacto,*/
+            /*ri!cliente.RFCnombre*/
+            /*)*/
+            ,
+            saveInto: {
+              ri!cliente.razonSocial,
+              a!save(
+                ri!cliente.RFCnombre,
+                null
+              ),
+              a!save(
+                ri!cliente.RFCapellidos,
+                null
+              )
+            },
+            refreshAfter: "UNFOCUS",
+            showWhen: and(
+              not(
+                isnull(
+                  ri!cliente.RFCregimenFiscal
+                )
+              ),
+              ri!cliente.RFCregimenFiscal = "M1"
+            ),
+            required: true,
+            requiredMessage: " ",
+            validations: {if(len(ri!cliente.RFCnombre)>35,"El nombre de la Razon Social es demasiado larga. Quite "&tostring(len(ri!cliente.RFCnombre)-35)& " letras.",{})},
+            validationGroup: "validacion"
+          ),
+          a!textField(
+            label: "RFC Nombre",
+            labelPosition: "ABOVE",
+            value: /*if(*/
+            /*isnull(*/
+            /*ri!cliente.RFCnombre*/
+            /*),*/
+            /*ri!cliente.nombreContacto,*/
+            ri!cliente.RFCnombre/*)*/
+            ,
+            saveInto: {
+              ri!cliente.RFCnombre,
+              a!save(
+                ri!cliente.razonSocial,
+                null
+              )
+            },
+            refreshAfter: "UNFOCUS",
+            showWhen: and(
+              not(
+                isnull(
+                  ri!cliente.RFCregimenFiscal
+                )
+              ),
+              not(
+                ri!cliente.RFCregimenFiscal = "M1"
+              )
+            ),
+            required: true,
+            requiredMessage: " ",
+            validations: {if(len(ri!cliente.RFCnombre)>35,"El nombre del cliente es demasiado largo. Quite "&tostring(len(ri!cliente.RFCnombre)-35)& " letras.",{})},
+            
+            validationGroup: "validacion"
+          ),
+          a!textField(
+            label: "RFC Apellidos",
+            labelPosition: "ABOVE",
+            value: /*if(*/
+            /*isnull(*/
+            /*ri!cliente.RFCapellidos*/
+            /*),*/
+            /*ri!cliente.apellidoContacto,*/
+            ri!cliente.RFCapellidos/*)*/
+            ,
+            saveInto: {
+              ri!cliente.RFCapellidos,
+              a!save(
+                ri!cliente.razonSocial,
+                null
+              )
+            },
+            refreshAfter: "UNFOCUS",
+            showWhen: and(
+              not(
+                isnull(
+                  ri!cliente.RFCregimenFiscal
+                )
+              ),
+              not(
+                ri!cliente.RFCregimenFiscal = "M1"
+              )
+            ),
+            required: true,
+            requiredMessage: " ",
+            validations: {if(len(ri!cliente.RFCapellidos)>35,"Los apellidos del cliente son demasiado largo. Quite "&tostring(len(ri!cliente.RFCapellidos)-35)& " letras.",{})},
+            validationGroup: "validacion"
+          ),
+          a!textField(
+            label: "RFC",
+            labelPosition: "ABOVE",
+            value: ri!cliente.RFC,
+            saveInto: ri!cliente.RFC,
+            refreshAfter: "UNFOCUS",
+            showWhen: not(
+              isnull(
+                ri!cliente.RFCregimenFiscal
+              )
+            ),
+            required: true,
+            requiredMessage: " ",
+            validations: {if(len(ri!cliente.RFC)>16,"Este campo es demasiado largo. Quite "&tostring(len(ri!cliente.RFCapellidos)-16)& " caracteres.",{})},
+            validationGroup: "validacion"
+          ),
+          /*a!richTextDisplayField(label:"naaa",value:tostring(isnull(local!datosRFCPorCodigoPostal))),*/
+          a!textField(
+            label: "RFC Código Postal",
+            value: tointeger(
+              ri!cliente.RFCcodigoPostal
+            ),
+            saveInto: {
+              ri!cliente.RFCcodigoPostal,
+              a!save(local!mostrarDesplegableRFCEstado,null),
+              a!save(local!mostrarDesplegableRFCMunicipio,null),
+              a!save(local!mostrarDesplegableRFCColonia,null),
+              a!save(
+                ri!cliente.RFCestado,
+                null
+              ),
+              a!save(
+                ri!cliente.RFCmunicipio,
+                null
+              ),
+              a!save(
+                ri!cliente.RFCcolonia,
+                null
+              ),
+              if(
+                not(
+                  isnull(
+                    ri!cliente.RFCcodigoPostal
+                  )
+                ),
+                {
+                  a!save(
+                    ri!cliente.RFCestado,
+                    null
+                  ),
+                  a!save(
+                    ri!cliente.RFCmunicipio,
+                    null
+                  ),
+                  a!save(
+                    ri!cliente.RFCcolonia,
+                    null
+                  ),
+                  a!save(
+                    local!datosRFCPorCodigoPostal,
+                    rule!KOF_QE_CocacolaFemsa_Cat_CodigoPostal(
+                      estado: null,
+                      codigoPostal: ri!cliente.RFCcodigoPostal,
+                      idEstado:null,
+                      pagingInfo: null
+                    ).data
+                  ),
+                  if(length(local!datosRFCPorCodigoPostal)>0,
+                  {
+                    a!save(
+                      local!valoresRFCEstadoMin,
+                      union(
+                        local!datosRFCPorCodigoPostal.id_estado,
+                        local!datosRFCPorCodigoPostal.id_estado
+                      )
+                    ),
+                    a!save(
+                    local!valoresRFCEstado,
+                    union(
+                      local!datosRFCPorCodigoPostal.estado,
+                      local!datosRFCPorCodigoPostal.estado
+                    )
+                  ),
+                  a!save(
+                    local!valoresRFCMunicipio,
+                    union(
+                      local!datosRFCPorCodigoPostal.municipio,
+                      local!datosRFCPorCodigoPostal.municipio
+                    )
+                  ),
+                  a!save(
+                    local!valoresRFCColonia,
+                    union(
+                      local!datosRFCPorCodigoPostal.colonia,
+                      local!datosRFCPorCodigoPostal.colonia
+                    )
+                  )},{}),
+                  if(or(isnull(local!valoresRFCEstado),length(local!valoresRFCEstado)=1),
+                  a!save(ri!cliente.RFCestado,local!valoresRFCEstadoMin),{}),
+                  if(or(isnull(local!valoresRFCMunicipio),length(local!valoresRFCMunicipio)=1),
+                  a!save(ri!cliente.RFCmunicipio,local!valoresRFCMunicipio),{}),
+                  if(or(isnull(local!valoresRFCColonia),length(local!valoresRFCColonia)=1),
+                  a!save(ri!cliente.RFCcolonia,local!valoresRFCColonia),{})
+                },
+                {
+                  
+                }
+              )
+            },
+            showWhen: not(
+              isnull(
+                ri!cliente.RFCregimenFiscal
+              )
+            ),
+            validations: {if(len(tostring(ri!cliente.RFCcodigoPostal))<4,
+            "Introduzca al menos 4 números",
+            if(or(isnull(local!datosRFCPorCodigoPostal),length(local!datosRFCPorCodigoPostal)=0),"El Código Postal no Existe",{}))}
+          ),
+          /*a!dropdownField(*/
+          /*label: "RFC Estado",*/
+          /*placeholderLabel: "--Seleccionar--",*/
+          /*choiceLabels: local!rfcEstado.estado,*/
+          /*choiceValues: local!rfcEstado.id_estado,*/
+          /*value: ri!cliente.RFCestado,*/
+          /*showWhen: not(*/
+          /*isnull(*/
+          /*ri!cliente.RFCregimenFiscal*/
+          /*)*/
+          /*),*/
+          /*saveInto: {*/
+          /*ri!cliente.RFCestado,*/
+          /*a!save(*/
+          /*local!codigosPostales,*/
+          /*index(*/
+          /*rule!KOF_QE_CocacolaFemsa_Cat_CodigoPostal(*/
+          /*estado: ri!cliente.RFCestado,*/
+          /*pagingInfo: null*/
+          /*).data,*/
+          /*"id_codigop",*/
+          /*null*/
+          /*)*/
+          /*)*/
+          /*}*/
+          /*),*/
+          /*a!dropdownField(*/
+          /*label: "RFC Código Postal",*/
+          /*placeholderLabel: "--Seleccionar--",*/
+          /*choiceLabels: if(*/
+          /*isnull(*/
+          /*ri!cliente.RFCestado*/
+          /*),*/
+          /*null,*/
+          /*local!codigosPostales*/
+          /*),*/
+          /*choiceValues: if(*/
+          /*isnull(*/
+          /*ri!cliente.RFCestado*/
+          /*),*/
+          /*null,*/
+          /*local!codigosPostales*/
+          /*),*/
+          /*value: tointeger(*/
+          /*ri!cliente.RFCcodigoPostal*/
+          /*),*/
+          /*saveInto: ri!cliente.RFCcodigoPostal,*/
+          /*showWhen: not(*/
+          /*isnull(*/
+          /*ri!cliente.RFCregimenFiscal*/
+          /*)*/
+          /*)*/
+          /*),*/
+          if(
+            and(or(isnull(local!valoresRFCEstado),length(local!valoresRFCEstado)=1),isnull(local!mostrarDesplegableRFCEstado)),
+            a!textField(
+              label: "RFC Estado",
+              value: local!valoresRFCEstado,
+              showWhen: not(
+                isnull(
+                  ri!cliente.RFCregimenFiscal
+                )
+              ),
+              /*saveInto: ri!cliente.RFCestado,*/
+              readOnly: true()
+            ),
+            a!dropdownField(
+              label: "RFC Estado",
+              placeholderLabel: "--Seleccionar--",
+              choiceLabels: split(
+                local!valoresRFCEstado,
+                ";"
+              ),
+              choiceValues: split(
+                local!valoresRFCEstado,
+                ";"
+              ),
+              value: 
+              /*if(*/
+                /*find(*/
+                  /*";",*/
+                  /*ri!cliente.RFCestado*/
+                /*) = 0,*/
+                ri!cliente.RFCestado,
+                /*null*/
+              /*),*/
+              saveInto: {ri!cliente.RFCestado,
+              a!save(local!mostrarDesplegableRFCEstado,true())},
+              showWhen: not(
+                isnull(
+                  ri!cliente.RFCregimenFiscal
+                )
+              )
+            )
+          ),
+          if(
+            and(or(isnull(local!valoresRFCMunicipio),length(local!valoresRFCMunicipio)=1),isnull(local!mostrarDesplegableRFCMunicipio)),
+            a!textField(
+            label: "RFC Municipio",
+            labelPosition: "ABOVE",
+            value: /*if(*/
+            /*isnull(*/
+            /*ri!cliente.RFCmunicipio*/
+            /*),*/
+            /*ri!cliente.municipio,*/
+            local!valoresRFCMunicipio/*)*/
+            ,
+            /*saveInto: ri!cliente.RFCmunicipio,*/
+            refreshAfter: "UNFOCUS",
+            showWhen: not(
+              isnull(
+                ri!cliente.RFCregimenFiscal
+              )
+            ),
+            required: true,
+            requiredMessage: " ",
+            readOnly: true(),
+            validations: {},
+            validationGroup: "validacion"
+          ),
+          a!dropdownField(
+            label: "RFC Municipio",
+            placeholderLabel: "--Seleccionar--",
+            choiceLabels: split(
+              local!valoresRFCMunicipio,
+              ";"
+            ),
+            choiceValues: split(
+              local!valoresRFCMunicipio,
+              ";"
+            ),
+            value: if(
+              find(
+                ";",
+                ri!cliente.RFCmunicipio
+              ) = 0,
+              ri!cliente.RFCmunicipio,
+              null
+            ),
+            saveInto: {ri!cliente.RFCmunicipio,
+            a!save(local!mostrarDesplegableRFCMunicipio,true())},
+            showWhen: not(
+              isnull(
+                ri!cliente.RFCregimenFiscal
+              )
+            )
+          )),
+          /*a!richTextDisplayField(label:"Valores Colonia",value:length(local!valoresRFCColonia)),*/
+          if(
+            and(or(isnull(local!valoresRFCColonia),length(local!valoresRFCColonia)=1),isnull(local!mostrarDesplegableRFCColonia)),
+            a!textField(
+            label: "RFC Colonia",
+            labelPosition: "ABOVE",
+            value: /*if(*/
+            /*isnull(*/
+            /*ri!cliente.RFCcolonia*/
+            /*),*/
+            /*ri!cliente.colonia,*/
+            local!valoresRFCColonia/*)*/
+            ,
+            /*saveInto: ri!cliente.RFCcolonia,*/
+            refreshAfter: "UNFOCUS",
+            showWhen: not(
+              isnull(
+                ri!cliente.RFCregimenFiscal
+              )
+            ),
+            required: true,
+            requiredMessage: " ",
+            readOnly: true(),
+            validations: {},
+            validationGroup: "validacion"
+          ),
+          a!dropdownField(
+            label: "RFC Colonia",
+            placeholderLabel: "--Seleccionar--",
+            choiceLabels: 
+            /*split(*/
+              local!valoresRFCColonia,
+              /*";"*/
+            /*),*/
+            choiceValues: 
+            /*split(*/
+              local!valoresRFCColonia,
+              /*";"*/
+            /*),*/
+            value: 
+            /*if(*/
+              /*find(*/
+                /*";",*/
+                /*ri!cliente.RFCcolonia*/
+              /*) = 0,*/
+              ri!cliente.RFCcolonia,
+              /*null*/
+            /*),*/
+            saveInto: {ri!cliente.RFCcolonia,
+            a!save(local!mostrarDesplegableRFCColonia,true())},
+            showWhen: not(
+              isnull(
+                ri!cliente.RFCregimenFiscal
+              )
+            )
+          )),
+          a!textField(
+            label: "RFC Calle",
+            labelPosition: "ABOVE",
+            value: /*if(*/
+            /*isnull(*/
+            /*ri!cliente.RFCcalle*/
+            /*),*/
+            /*ri!cliente.calle,*/
+            ri!cliente.RFCcalle/*)*/
+            ,
+            saveInto: ri!cliente.RFCcalle,
+            refreshAfter: "UNFOCUS",
+            showWhen: not(
+              isnull(
+                ri!cliente.RFCregimenFiscal
+              )
+            ),
+            required: true,
+            requiredMessage: " ",
+            validations: {},
+            validationGroup: "validacion"
+          ),
+          a!textField(
+            label: "RFC Numero Exterior",
+            labelPosition: "ABOVE",
+            value: /*if(*/
+            /*isnull(*/
+            /*ri!cliente.RFCnumeroExt*/
+            /*),*/
+            /*ri!cliente.numeroExt,*/
+            ri!cliente.RFCnumeroExt/*)*/
+            ,
+            saveInto: ri!cliente.RFCnumeroExt,
+            refreshAfter: "UNFOCUS",
+            showWhen: not(
+              isnull(
+                ri!cliente.RFCregimenFiscal
+              )
+            ),
+            required: true,
+            requiredMessage: " ",
+            validations: {},
+            validationGroup: "validacion"
+          ),
+          a!textField(
+            label: "RFC Numero Interior",
+            labelPosition: "ABOVE",
+            value: /*if(*/
+            /*isnull(*/
+            /*ri!cliente.RFCnumeroInt*/
+            /*),*/
+            /*ri!cliente.numeroInt,*/
+            ri!cliente.RFCnumeroInt/*)*/
+            ,
+            saveInto: ri!cliente.RFCnumeroInt,
+            refreshAfter: "UNFOCUS",
+            showWhen: not(
+              isnull(
+                ri!cliente.RFCregimenFiscal
+              )
+            ),
+            required: true,
+            requiredMessage: " ",
+            validations: {},
+            validationGroup: "validacion"
+          )/*a!textField(*/
+          /*label: "RFC Estado",*/
+          /*labelPosition: "ABOVE",*/
+          /*value: if(isnull(ri!cliente.RFCestado),ri!cliente.estado,ri!cliente.RFCestado),*/
+          /*saveInto: ri!cliente.RFCcodigoPostal,*/
+          /*refreshAfter: "UNFOCUS",*/
+          /*validations: {},*/
+          /*required:true,*/
+          /*validationGroup:"validacion",*/
+          /*requiredMessage:" ",*/
+          /*showWhen: not(isnull(ri!cliente.RFCregimenFiscal))*/
+          /*),*/
+         
+        },
+        marginBelow:"STANDARD"),{}),
+        a!dropdownField(label:"USO CFDI",placeholderLabel:"--Seleccionar--", choiceLabels: local!datosCFDI.zdescripci,choiceValues: local!datosCFDI.ztiponec,value: ri!cliente.CFDI,saveInto: ri!cliente.CFDI,showWhen: not(isnull(ri!cliente.RFCregimenFiscal))),
+      a!boxLayout(
+        label: "Formularios ISSCOM",
+        contents: {
+          rule!KOF_SCT_CocacolaFemsa_ISSCOM(
+            cuestionarioISSCOM: ri!cliente.ISSCOM
+          )
+        },
+        style: "STANDARD",
+        isCollapsible: true,
+        isInitiallyCollapsed: true,
+        marginBelow: "STANDARD"
+      ),
+      a!boxLayout(
+        label: "Formulario GEC",
+        contents: {
+          rule!KOF_SCT_CocacolaFemsa_GEC(
+            cuestionarioGEC: ri!cliente.GEC
+          )
+        },
+        style: "STANDARD",
+        isCollapsible: true,
+        isInitiallyCollapsed: true,
+        marginBelow: "STANDARD"
+      ),
+      /*a!boxLayout(*/
+      /*label: "Formularios de prospección 3",*/
+      /*contents: {},*/
+      /*style: "STANDARD",*/
+      /*isCollapsible:true,*/
+      /*isInitiallyCollapsed:true,*/
+      /*marginBelow: "STANDARD"*/
+      /*),*/
+      a!richTextDisplayField(
+        value: {
+          a!richTextItem(
+            text: {
+              "Términos y condiciones"
+            },
+            color: cons!KOF_Color_Rojo_CocaCola,
+            size: "MEDIUM",
+            style: "STRONG"
+          )
+        },
+        align: "CENTER"
+      ),
+      /*a!webContentField(source: "https://inventariokof.s3-us-west-2.amazonaws.com/terminos_condiciones_uso.pdf"),*/
+      a!linkField(
+        links: a!safeLink(
+          label: "Ver Documento",
+          uri: "https://inventariokof.s3-us-west-2.amazonaws.com/terminos_condiciones_uso.pdf"
+        )
+      ),
+      a!checkboxField(
+        label: "Ejemplo de aviso de privacidad.",
+        labelPosition: "ABOVE",
+        choiceLabels: {
+          "Acepto Términos y Condiciones expresados
+  en el aviso de privacidad"
+        },
+        choiceValues: {
+          true
+        },
+        value: local!terminosCondiciones,
+        saveInto: {
+          local!terminosCondiciones
+        },
+        required: true,
+        requiredMessage: "Tienes que aceptar los términos y condicines ",
+        validations: {},
+        validationGroup: "validacion"
+      ),
+      a!buttonArrayLayout(
+        buttons: {
+          a!buttonWidget(
+            label: "Continue",
+            saveInto: a!save(
+              ri!cliente.fechaAlta,
+              now()
+            ),
+            submit: true,
+            style: "NORMAL",
+            validationGroup: "validacion"
+          )
+        },
+        align: "START"
+      )
+    }
+  )

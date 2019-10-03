@@ -37,14 +37,16 @@ exports.handler = function (event, context, callback) {
         
         // let fechaInicio = new Date(añoI,mesI,diaI,17);
         //let fechaInicio = añoI + "-" + mesI + "-" + diaI + " 17:00:00";
-        let fechaInicio = ayer + " 17:00:00";
+        // let fechaInicio = ayer + " 17:00:00";
         // let fechaFin = new Date(añoF,mesF,diaF,17);
         // let fechaFin = añoF + "-" + mesF + "-" + diaF + " 17:00:00";
-        let fechaFin = hoy + " 17:00:00";
+        // let fechaFin = hoy + " 17:00:00";
         
-        var tablaPedidos = "SELECT * FROM pedidos WHERE FechaGenerada >= '" + fechaInicio + "' AND FechaGenerada < '" + fechaFin + "'";
+        var tablaPedidos = "SELECT `PEDIDO`, DATE_FORMAT(`FECHA ENTREGA`, '%Y.%m.%d'), `CLIENTE`, `RESPONSABLE DE PAGO`, `DESTINATARIO DE MERCANCIA`, DATE_FORMAT(`FECHA DEL PEDIDO`, '%Y.%m.%d'), `MATERIAL`, `CANTIDAD`, `UM`, `TIPO OPERACIÓN`, `VPT` FROM pedidos WHERE CLIENTE <> 'CD00000000' AND estatus <> 'enviado'";
         connection.query(tablaPedidos, function (err, result) {
             if (err) throw err;
+            console.log("Res: ", result);
+            let actualizarEstatus = "UPDATE `pedidos` SET `estatus` = 'enviado' WHERE CLIENTE <> 'CD00000000' AND estatus <> 'enviado'";
             const header = ['PEDIDO', 'FECHA ENTREGA', 'CLIENTE', 'RESPONSABLE DE PAGO', 'DESTINATARIO DE MERCANCIA', 'FECHA DEL PEDIDO', 'MATERIAL', 'CANTIDAD', 'UM', 'TIPO OPERACIÓN', 'VPT'];
             const csvFromArrayOfArrays = convertArrayToCSV(result, {
                 header,
@@ -80,7 +82,10 @@ exports.handler = function (event, context, callback) {
                     callback();
                 }
             });
-            connection.end();
+            connection.query(actualizarEstatus, function (err, result) {
+                if (err) throw err;
+                connection.end();
+            });
         });
     });
 };

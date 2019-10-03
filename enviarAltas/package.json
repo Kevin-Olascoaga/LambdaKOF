@@ -2,10 +2,11 @@
   "name": "kof",
   "version": "1.0.0",
   "dependencies": {
-    "convert-array-to-csv": "^1.0.9",
+    "jsonexport": "^2.4.1",
     "moment-timezone": "^0.5.26",
     "mysql": "2.17.1",
     "ssh2": "^0.8.5",
-    "ssh2-sftp-client": "^4.1.0"
+    "ssh2-sftp-client": "^4.1.0",
+    "uuid": "^3.3.3"
   }
 }
