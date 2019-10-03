@@ -6,10 +6,14 @@
 // const uuidv4 = require('uuid/v4');
 var mysql = require('mysql');
 var moment = require("moment-timezone");
-
+var date1 = new Date();
 exports.handler = function (event, context, callback) {
 
-
+    var fecha = getFecha();
+    function getFecha(){
+        return moment(date1.getTime()).tz("America/Mexico_City").format("YYYY-MM-DD HH:mm:SS");
+    }
+    console.log("Fecha", fecha);
     //////////////////////////SQL CONNECTION//////////////////////////
 
     var connection = mysql.createConnection({
@@ -47,7 +51,7 @@ exports.handler = function (event, context, callback) {
                 ZTEXT: null, //Se solicita en la mascara de clientes
                 ZFECHA: null, //Extraer con la información de fechaAlta (Se coloca por .NET)
                 ZHORA: null, //Extraer con la información de fechaAlta (Se coloca por .NET)
-                fechaSolicitud: moment(date.getTime()).tz("America/Mexico_City").format("YYYY-MM-DD HH:mm:SS"), //event.cliente['fechaAlta'], //Extraer fecha de lambda
+                fechaSolicitud: fecha, //event.cliente['fechaAlta'], //Extraer fecha de lambda
                 //Front Appian
                 //idCliente: event['idCliente'], //Generado incrementalmente desde Appian, temporal hasta que se tenga el definitivo de SAP
                 //codigoCliente: event['codigoCliente'], //Usuario final que genera el transaccional
@@ -160,7 +164,7 @@ exports.handler = function (event, context, callback) {
                 ZTEXT: null, //Se solicita en la mascara de clientes
                 ZFECHA: null, //Extraer con la información de fechaAlta (Se coloca por .NET)
                 ZHORA: null, //Extraer con la información de fechaAlta (Se coloca por .NET)
-                fechaSolicitud: moment(date.getTime()).tz("America/Mexico_City").format("YYYY-MM-DD HH:mm:SS"), //event['fechaAlta'], //Extraer fecha de lambda
+                fechaSolicitud: fecha, //event['fechaAlta'], //Extraer fecha de lambda
                 //Front Appian
                 //idCliente: event['idCliente'], //Generado incrementalmente desde Appian, temporal hasta que se tenga el definitivo de SAP
                 //codigoCliente: event['codigoCliente'], //Usuario final que genera el transaccional
@@ -244,8 +248,6 @@ exports.handler = function (event, context, callback) {
         }
 
         //////////////////////////////////////////////////////////////////
-
-
 
         let resultado;
         let dato;
