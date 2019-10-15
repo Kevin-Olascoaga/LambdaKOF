@@ -6,14 +6,9 @@
 // const uuidv4 = require('uuid/v4');
 var mysql = require('mysql');
 var moment = require("moment-timezone");
-var date1 = new Date();
-exports.handler = function (event, context, callback) {
 
-    var fecha = getFecha();
-    function getFecha(){
-        return moment(date1.getTime()).tz("America/Mexico_City").format("YYYY-MM-DD HH:mm:SS");
-    }
-    console.log("Fecha", fecha);
+exports.handler = function (event, context, callback) {
+    
     //////////////////////////SQL CONNECTION//////////////////////////
 
     var connection = mysql.createConnection({
@@ -35,9 +30,10 @@ exports.handler = function (event, context, callback) {
         let cliente;
         let cuestionarios;
         let productos = event['productos']; //Array de productos
-        var date = new Date();
 
         if (productos) {
+            var date = new Date(event.cliente['fechaAlta']);
+            date.setHours(date.getHours() - 5);
             cliente = {
                 //Back
                 idOficinaMovil: event.cliente['idCliente'], //Identificador aleatorio para OM (16)
@@ -51,7 +47,7 @@ exports.handler = function (event, context, callback) {
                 ZTEXT: null, //Se solicita en la mascara de clientes
                 ZFECHA: null, //Extraer con la información de fechaAlta (Se coloca por .NET)
                 ZHORA: null, //Extraer con la información de fechaAlta (Se coloca por .NET)
-                fechaSolicitud: fecha, //event.cliente['fechaAlta'], //Extraer fecha de lambda
+                fechaSolicitud: date, //event.cliente['fechaAlta'], //Extraer fecha de lambda
                 //Front Appian
                 //idCliente: event['idCliente'], //Generado incrementalmente desde Appian, temporal hasta que se tenga el definitivo de SAP
                 //codigoCliente: event['codigoCliente'], //Usuario final que genera el transaccional
@@ -115,12 +111,12 @@ exports.handler = function (event, context, callback) {
                 OCASIONDECONSUMO: "",
                 BXTXT: ""
             };
-            if(cliente.SEQULUNES == 1){cliente.SEQUMARTES = 2};
-            if(cliente.SEQUMARTES == 1){cliente.SEQUMIERCOLES = 2};
-            if(cliente.SEQUMIERCOLES == 1){cliente.SEQUJUEVES = 2};
-            if(cliente.SEQUJUEVES == 1){cliente.SEQUVIERNES = 2};
-            if(cliente.SEQUVIERNES == 1){cliente.SEQUSABADO = 2};
-            if(cliente.SEQUSABADO == 1){cliente.SEQULUNES = 2};
+            if(cliente.SEQULUNES == 1){cliente.SEQUMARTES = 2};if(cliente.SEQULUNES == 0){cliente.SEQULUNES = null};
+            if(cliente.SEQUMARTES == 1){cliente.SEQUMIERCOLES = 2};if(cliente.SEQUMARTES == 0){cliente.SEQUMARTES = null};
+            if(cliente.SEQUMIERCOLES == 1){cliente.SEQUJUEVES = 2};if(cliente.SEQUMIERCOLES == 0){cliente.SEQUMIERCOLES = null};
+            if(cliente.SEQUJUEVES == 1){cliente.SEQUVIERNES = 2};if(cliente.SEQUJUEVES == 0){cliente.SEQUJUEVES = null};
+            if(cliente.SEQUVIERNES == 1){cliente.SEQUSABADO = 2};if(cliente.SEQUVIERNES == 0){cliente.SEQUVIERNES = null};
+            if(cliente.SEQUSABADO == 1){cliente.SEQULUNES = 2};if(cliente.SEQUSABADO == 0){cliente.SEQUSABADO = null};
             cuestionarios = {
                 ISSCOMcuestionario: event.cliente.ISSCOM['cuestionario'],
                 ISSCOMp1: event.cliente.ISSCOM['p1'],
@@ -151,6 +147,8 @@ exports.handler = function (event, context, callback) {
                 pedidos.push(pedido);
             });
         } else {
+            var date = new Date(event['fechaAlta']);
+            date.setHours(date.getHours() - 5);
             cliente = {
                 //Back
                 idOficinaMovil: event['idCliente'], //Identificador aleatorio para OM (16)
@@ -164,7 +162,7 @@ exports.handler = function (event, context, callback) {
                 ZTEXT: null, //Se solicita en la mascara de clientes
                 ZFECHA: null, //Extraer con la información de fechaAlta (Se coloca por .NET)
                 ZHORA: null, //Extraer con la información de fechaAlta (Se coloca por .NET)
-                fechaSolicitud: fecha, //event['fechaAlta'], //Extraer fecha de lambda
+                fechaSolicitud: date, //event['fechaAlta'], //Extraer fecha de lambda
                 //Front Appian
                 //idCliente: event['idCliente'], //Generado incrementalmente desde Appian, temporal hasta que se tenga el definitivo de SAP
                 //codigoCliente: event['codigoCliente'], //Usuario final que genera el transaccional
@@ -228,12 +226,12 @@ exports.handler = function (event, context, callback) {
                 OCASIONDECONSUMO: "",
                 BXTXT: ""
             };
-            if(cliente.SEQULUNES == 1){cliente.SEQUMARTES = 2};
-            if(cliente.SEQUMARTES == 1){cliente.SEQUMIERCOLES = 2};
-            if(cliente.SEQUMIERCOLES == 1){cliente.SEQUJUEVES = 2};
-            if(cliente.SEQUJUEVES == 1){cliente.SEQUVIERNES = 2};
-            if(cliente.SEQUVIERNES == 1){cliente.SEQUSABADO = 2};
-            if(cliente.SEQUSABADO == 1){cliente.SEQULUNES = 2};
+            if(cliente.SEQULUNES == 1){cliente.SEQUMARTES = 2};if(cliente.SEQULUNES == 0){cliente.SEQULUNES = null};
+            if(cliente.SEQUMARTES == 1){cliente.SEQUMIERCOLES = 2};if(cliente.SEQUMARTES == 0){cliente.SEQUMARTES = null};
+            if(cliente.SEQUMIERCOLES == 1){cliente.SEQUJUEVES = 2};if(cliente.SEQUMIERCOLES == 0){cliente.SEQUMIERCOLES = null};
+            if(cliente.SEQUJUEVES == 1){cliente.SEQUVIERNES = 2};if(cliente.SEQUJUEVES == 0){cliente.SEQUJUEVES = null};
+            if(cliente.SEQUVIERNES == 1){cliente.SEQUSABADO = 2};if(cliente.SEQUVIERNES == 0){cliente.SEQUVIERNES = null};
+            if(cliente.SEQUSABADO == 1){cliente.SEQULUNES = 2};if(cliente.SEQUSABADO == 0){cliente.SEQUSABADO = null};
             cuestionarios = {
                 ISSCOMcuestionario: event.ISSCOM['cuestionario'],
                 ISSCOMp1: event.ISSCOM['p1'],

@@ -1,9 +1,12 @@
 var AWS = require('aws-sdk');
 var mysql = require('mysql');
+var nodemailer = require('nodemailer');
 var moment = require("moment-timezone");
 var jsonexport = require('jsonexport');
 let Client = require('ssh2-sftp-client');
 const uuidv4 = require('uuid/v4');
+
+var ses = new AWS.SES();
 
 exports.handler = function (event, context, callback) {
     // generarArchivoS3();
@@ -23,7 +26,8 @@ exports.handler = function (event, context, callback) {
         console.log('Conexión a la base de datos');
         let hoy = new Date();
         hoy = moment(hoy.getTime()).tz("America/Mexico_City").format("YYYY-MM-DD 00:00:00");
-        let hoy2 = new Date(hoy - 2 * 60 * 60 * 1000);
+        let hoy2 = new Date();
+        hoy2 = new Date(hoy2 - 2 * 60 * 60 * 1000);
         hoy2 = moment(hoy2.getTime()).tz("America/Mexico_City").format("YYYY-MM-DD HH:mm:SS");
         console.log("Hoy menos 2: ", hoy2);
         // let diaF = hoy.getDate();
@@ -43,11 +47,11 @@ exports.handler = function (event, context, callback) {
         // let fechaFin = new Date(añoF,mesF,diaF,17);
         // let fechaFin = añoF + "-" + mesF + "-" + diaF;
         let event = uuidv4();
-        var updateClientes = "UPDATE `prueba` SET `EVENTOGUID` = '" + event + "' WHERE fechaSolicitud > '" + hoy + "'";
+        var updateClientes = "UPDATE `prueba` SET `EVENTOGUID` = '" + event + "' WHERE envio = 'pendiente' AND KUNNR = 'CD00000000'";
         /////////Query con la fecha de actualización/////////////////////Cambiar de <= a =
         connection.query(updateClientes, function (err, result) {
             if (err) throw err;
-            var tablaClientes = "SELECT idOficinaMovil, EVENTOGUID, VKORG, KDGRP, BZIRK, KUNNR, ID_Solicitud, ID_Motivo_Solicitud, Route, ZTEXT, DATE_FORMAT(ZFECHA, '%Y/%m/%d') ZFECHA, ZHORA, DATE_FORMAT(fechaSolicitud, '%Y/%m/%d') fechaSolicitud, ZNAME1, NAME_FIRST, NAME_LAST, ZTELFIJO, ZCELULAR, ZTELFIJO_CEL, ZCORREO, ZZCRM_LAT, ZZCRM_LONG, ZCPOSTAL, estado, ZESTPROV, ZMUNIDELEG, ZCOLONIA, ZCALLE, ZCALLECON, ZENTRECALLE1, ZENTRECALLE2, ZNUMEXT, ZLOTE, ZMANZANA, ZNUMINT, ZENREJADO, VPTYP, ROUTE, RUTA_REPARTO, diasVisita, SEQULUNES, SEQUMARTES, SEQUMIERCOLES, SEQUJUEVES, SEQUVIERNES, SEQUSABADO, IDMETODO, ZREQREM, ZREQFAC, ZPAPERLESS, ZFISICAMORAL, ZNAME4, ZRFCNOMBRE, ZRFCAPELLIDOS, ZRFC, ZRFCCODIGOPOSTAL, ZRFCESTADO, ZRFCMUNDELEG, ZRFCCOLONIA, ZRFCCALLE, ZRFCCALLE_CON, ZRFCNUM_EXT, ZRFCNUM_INT, ZCFDI, ISSCOM, GEC, LOCALIDAD, OCASIONDECONSUMO FROM prueba WHERE fechaSolicitud > '" + hoy + "'";
+            var tablaClientes = "SELECT idOficinaMovil, EVENTOGUID, VKORG, KDGRP, BZIRK, KUNNR, ID_Solicitud, ID_Motivo_Solicitud, Route, ZTEXT, DATE_FORMAT(ZFECHA, '%Y/%m/%d') ZFECHA, ZHORA, DATE_FORMAT(fechaSolicitud, '%Y/%m/%d') fechaSolicitud, ZNAME1, NAME_FIRST, NAME_LAST, ZTELFIJO, ZCELULAR, ZTELFIJO_CEL, ZCORREO, ZZCRM_LAT, ZZCRM_LONG, ZCPOSTAL, estado, ZESTPROV, ZMUNIDELEG, ZCOLONIA, ZCALLE, ZCALLECON, ZENTRECALLE1, ZENTRECALLE2, ZNUMEXT, ZLOTE, ZMANZANA, ZNUMINT, ZENREJADO, VPTYP, ROUTE, RUTA_REPARTO, diasVisita, SEQULUNES, SEQUMARTES, SEQUMIERCOLES, SEQUJUEVES, SEQUVIERNES, SEQUSABADO, IDMETODO, ZREQREM, ZREQFAC, ZPAPERLESS, ZFISICAMORAL, ZNAME4, ZRFCNOMBRE, ZRFCAPELLIDOS, ZRFC, ZRFCCODIGOPOSTAL, ZRFCESTADO, ZRFCMUNDELEG, ZRFCCOLONIA, ZRFCCALLE, ZRFCCALLE_CON, ZRFCNUM_EXT, ZRFCNUM_INT, ZCFDI, ISSCOM, GEC, LOCALIDAD, OCASIONDECONSUMO FROM prueba WHERE envio = 'pendiente' AND KUNNR = 'CD00000000'";
             connection.query(tablaClientes, function (err, result) {
                 if (err) throw err;
 
@@ -77,6 +81,37 @@ exports.handler = function (event, context, callback) {
                         }
                     });
 
+                    //////////////CORREO/////////////////////
+                    var mailOptions = {
+                        from: 'minsait.kof@gmail.com',
+                        subject: 'Clientes de Oficina Móvil' + fechaHora,
+                        html: `<p>Clientes generados por: <b>Oficina Móvil</b></p>`,
+                        to: 'minsait.kof@gmail.com',
+                        // bcc: Any BCC address you want here in an array,
+                        attachments: [{
+                            filename: "oficina_movil_FEMSA_" + fechaHora + ".csv",
+                            content: csv
+                        }]
+                    };
+        
+                    console.log('Creating SES transporter');
+                    // create Nodemailer SES transporter
+                    var transporter = nodemailer.createTransport({
+                        SES: ses
+                    });
+        
+                    // send email
+                    transporter.sendMail(mailOptions, function (err, info) {
+                        if (err) {
+                            console.log(err);
+                            console.log('Error sending email');
+                            callback(err);
+                        } else {
+                            console.log('Email sent successfully');
+                            callback();
+                        }
+                    });
+                    ////////////////////////////////////////////////
                     ///////////////////////////////////////////////
                     //Conexión SFTP////////////////////////////
                     // var s3 = new AWS.S3();
@@ -108,7 +143,11 @@ exports.handler = function (event, context, callback) {
                     //   });
                     //////////////////////////////////////////////////////////////
                 });
-                connection.end();
+                let estatusEnvio = "UPDATE `prueba` SET `envio` = 'enviado' WHERE envio = 'pendiente' AND KUNNR = 'CD00000000'";
+                connection.query(estatusEnvio, function (err, result) {
+                    if (err) throw err;
+                    connection.end();
+                });
             });
         });
     });
