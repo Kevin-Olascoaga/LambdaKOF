@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "dependencies": {
     "jsonexport": "^2.4.1",
-    "moment-timezone": "^0.5.26",
+    "moment-timezone": "^0.5.35",
     "mysql": "2.17.1",
     "ssh2": "^0.8.5",
     "ssh2-sftp-client": "^4.1.0",
