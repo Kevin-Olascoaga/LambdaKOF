@@ -2,7 +2,7 @@
   "name": "kof",
   "version": "1.0.0",
   "dependencies": {
-    "moment-timezone": "^0.5.26",
+    "moment-timezone": "^0.5.35",
     "mysql": "2.17.1"
   }
 }
